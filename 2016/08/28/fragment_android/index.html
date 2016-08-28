@@ -7,32 +7,37 @@
 <head>
   <meta charset="utf-8">
   
-  <title>浅析Cordova-Android | 文艺的Coder</title>
+  <title>浅析Fragment | 文艺的Coder</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="大成,前端,Hexo主题,前端开发,ios,设计,android,design,nodejs,JavaScript" />
+    <meta name="keywords" content="fragment," />
   
 
   <meta name="description" content="本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。
-Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
-如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。">
+简介Android运行在各种各样的设备中，有小屏幕的手机，超大屏的平板甚至电视，针对屏幕尺寸的差距，很难做到一份代码可以跑在不同的屏幕的设备上。
+Fragment的出现就是为了解决这样的问题,它就像一个嵌套的activity，拥有自己的布局（layout）并有自己的生命周期。
+生命周">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浅析Cordova-Android">
+<meta property="og:title" content="浅析Fragment">
 <meta property="og:url" content="https://nongcunshaoye.github.io/2016/08/28/fragment_android/index.html">
 <meta property="og:site_name" content="文艺的Coder">
 <meta property="og:description" content="本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。
-Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
-如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。">
-<meta property="og:image" content="http://cordova.apache.org/static/img/guide/cordovaapparchitecture.png">
-<meta property="og:updated_time" content="2016-08-28T01:03:02.000Z">
+简介Android运行在各种各样的设备中，有小屏幕的手机，超大屏的平板甚至电视，针对屏幕尺寸的差距，很难做到一份代码可以跑在不同的屏幕的设备上。
+Fragment的出现就是为了解决这样的问题,它就像一个嵌套的activity，拥有自己的布局（layout）并有自己的生命周期。
+生命周">
+<meta property="og:image" content="http://7xw1t6.com1.z0.glb.clouddn.com/dachengfragment1.png">
+<meta property="og:image" content="http://7xw1t6.com1.z0.glb.clouddn.com/coder_fragment4.png">
+<meta property="og:image" content="http://7xw1t6.com1.z0.glb.clouddn.com/dachengfragment2.png">
+<meta property="og:updated_time" content="2016-08-28T04:00:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浅析Cordova-Android">
+<meta name="twitter:title" content="浅析Fragment">
 <meta name="twitter:description" content="本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。
-Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
-如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。">
-<meta name="twitter:image" content="http://cordova.apache.org/static/img/guide/cordovaapparchitecture.png">
+简介Android运行在各种各样的设备中，有小屏幕的手机，超大屏的平板甚至电视，针对屏幕尺寸的差距，很难做到一份代码可以跑在不同的屏幕的设备上。
+Fragment的出现就是为了解决这样的问题,它就像一个嵌套的activity，拥有自己的布局（layout）并有自己的生命周期。
+生命周">
+<meta name="twitter:image" content="http://7xw1t6.com1.z0.glb.clouddn.com/dachengfragment1.png">
 
   
 
@@ -139,7 +144,7 @@ Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架�
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cordova简介"><span class="toc-text">Cordova简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebView"><span class="toc-text">WebView</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#框架"><span class="toc-text">框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结-1"><span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生命周期"><span class="toc-text">生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用法"><span class="toc-text">用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源码"><span class="toc-text">源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时序图"><span class="toc-text">时序图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类图"><span class="toc-text">类图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源码-1"><span class="toc-text">源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结-1"><span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#干货"><span class="toc-text">干货</span></a></li></ol>
   </div>
 
 
@@ -147,7 +152,7 @@ Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架�
 <div class="content content-post CENTER">
    <article id="post-fragment_android" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">浅析Cordova-Android</h1>
+    <h1 class="post-title">浅析Fragment</h1>
 
     <div class="article-meta">
       <span>
@@ -163,6 +168,11 @@ Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架�
       
 
       
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </span>
+
 
 
       
@@ -178,492 +188,580 @@ Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架�
   <div class="article-content">
     
       <p>本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。</p>
-<h3 id="Cordova简介"><a href="#Cordova简介" class="headerlink" title="Cordova简介"></a>Cordova简介</h3><pre><code>官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
-如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。
-一句话就是，Cordova提供了一组设备相关的API，通过这组API，移动应用能够以JavaScript访问原生的设备功能，如摄像头、麦克风等。
-</code></pre><p>目前Cordova在大部分平台上都有实现，这里只了解Cordova在Android平台上的实现<br> <a href="https://github.com/apache/cordova-android" target="_blank" rel="external">gitHub源码地址</a></p>
-<p>在分析Cordiva-Android之前 ，先温习一下Android系统为我们提供的加载h5控件WebView的使用以及与js的交互。</p>
-<h3 id="WebView"><a href="#WebView" class="headerlink" title="WebView"></a>WebView</h3><p><strong>基本使用</strong></p>
-<pre><code>首先xml里：
-&lt;WebView
-        android:id=&quot;@+id/webview&quot;
-        android:layout_width=&quot;fill_parent&quot;
-        android:layout_height=&quot;fill_parent&quot;
-        android:layout_marginTop=&quot;10dp&quot; /&gt;
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><pre><code>Android运行在各种各样的设备中，有小屏幕的手机，超大屏的平板甚至电视，针对屏幕尺寸的差距，很难做到一份代码可以跑在不同的屏幕的设备上。
+Fragment的出现就是为了解决这样的问题,它就像一个嵌套的activity，拥有自己的布局（layout）并有自己的生命周期。
+</code></pre><h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p><img src="http://7xw1t6.com1.z0.glb.clouddn.com/dachengfragment1.png" alt=""></p>
+<p>从上图可以看到Fragment比Activity多了几个额外的生命周期回调方法：</p>
+<pre><code>onAttach(Activity) ：当Fragment与Activity发生关联时调用。
+onCreateView(LayoutInflater, ViewGroup,Bundle)：创建该Fragment的视图调用
+onActivityCreated(Bundle)：当Activity的onCreate方法返回时调用
+onDestoryView()：与onCreateView想对应，当该Fragment的视图被移除时调用
+onDetach()：与onAttach相对应，当Fragment与Activity关联被取消时调用
+</code></pre><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><pre><code>Fragment使用方式主要有两种：1、静态方式 2、动态方式
+1、静态的方式：把Fragment当成普通的控件，直接写在Activity的布局文件中
+例子：
+新建一个FragmentTest继承Fragment重写onCreateView即可
+&lt;RelativeLayout
+    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot; &gt;
+        &lt;fragment
+            android:id=&quot;@+id/id_fragment_test&quot;
+            android:name=&quot;com.dacheng.demo.FragmentTest&quot;
+            android:layout_width=&quot;fill_parent&quot;
+            android:layout_height=&quot;45dp&quot; /&gt;
+&lt;/RelativeLayout&gt;
 
-//act里
-webview = (WebView) findViewById(R.id.webView1);
-webview.loadUrl(&quot;http://www.google.com/&quot;);
-//webview.reload();// reload page
-
-webview.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-        });
-设置标题，如：“Google”，在这里设置当前webview正在加载的页面的title：
-webview.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                titleview.setText(title);//textview
-            }
-        });
-</code></pre><p>使用方式很简单</p>
-<p> <strong>WebView与JavaScript的交互</strong></p>
-<p>我们知道WebView 本身就是提供js调用native的方法，以及native调用js的方法，来看看：<br>1、webview调用js</p>
-<pre><code>// webview调用js中的test的方法：
-mWebView.loadUrl(&quot;javascript:test()&quot;);
-//html如下:
-&lt;html&gt;
-  &lt;script language=&quot;javascript&quot;&gt;
-    //webview调用
-    function test() {
-      alert(&quot;1&quot;);
-    }
-  &lt;/script&gt;
-  &lt;body&gt;
-    .....
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p>2、js调用native</p>
-<pre><code>//TestJavaScriptInterface是要给js调用的类：
-class TestJavaScriptInterface {          
-      @JavascriptInterface //4.2以后要加注解
-    public void hello(String name){
-        Toast.makeText(WebViewTest.this, name, Toast.LENGTH_SHORT).show();
-    }
+2、动态方式：通过FragmentManagerM对Fragment进行管理（添加、删除、替换等）
+//获取Fragment管理器(其实就是当前Act的mFragments，它是FragmentManager的实现类的实例)
+FragmentManager fm = getFragmentManager();
+// 开启Fragment事务 （就是new了一个BackStackRecord实例返回）    FragmentTransaction transaction = fm.beginTransaction();
+   mTest = new FragmentTest();
+  // 使用当前Fragment的布局替代id_content的控件
+  transaction.replace(R.id.id_content, mWeixin);
+  // 事务提交
+  transaction.commit();
+</code></pre><p>接下来结合源码分析一下fragment的原理，这才是我们的重点。<br>如果看过6.0及以上的源码，会知道以6.0为分界线Activity对Fragment管理是有变化的。所以分析会有两个部分：先6.0以下，再看6.0及以上</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p>这里结合fragment的使用方式二（动态添加）来看源码。<br>先看getFragmentManager()方法：</p>
+<pre><code>//Activity里
+ @Override
+ public FragmentManager getFragmentManager() {
+      return  mFragments;
  }
-//首先webview要设置js可用：
-mWebview.setJavaScriptEnabled(true);
-
-//然后本地的类（被js调用的）映射出去
-mWebView.addJavascriptInterface(new TestJavaScriptInterface(), &quot;demo&quot;);
-“demo”就是公布给JS用的，js可以调用本地的类中的方法了：
-
-function test(){
-    if(demo){
-        demo.hello(&quot;test&quot;);
-    }
-}
-</code></pre><h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><pre><code>1、关于@JavascriptInterface ：
-  Android 4.2以下存在高危的漏洞，原理就是通过 WebView.addJavascriptInterface(Object o, String interface) 方法注册可供js调用的Java对象，
-  系统并没有对注册的Java对象方法调用做限制。导致攻击者可以利用反射调用未注册的其他任何Java对象，攻击者可以根据客户端的能力搞事情。
-
-2、为什么要先看一下WebView，因为cordova本质上还是这些东西，换汤不换药。
-</code></pre><p>接下来看cordova框架:</p>
-<h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>下面是官方框架图及描述：</p>
-<p><img src="http://cordova.apache.org/static/img/guide/cordovaapparchitecture.png" alt=""></p>
-<pre><code>Web App层是开发人员编写代码的主要地方，应用程序以网页的形式呈现，在一个index.html的本地页面文件中引用所需要的各种Web资源，
-如CSS、JavaScript、图像、影音文件等。应用程序的配置保存在config.xml文件中。
-
-WebView层用来呈现用户界面，即web页面的展现。例如，在Android平台是通过WebView控件实现web页面的呈现。
-
-Plugins主要用于在JavaScript代码中调用各平台native的功能。Cordova项目已经包含一些核心的plugin，
-如电池、摄像头、通讯录等。开发人员也可以开发自定义的plugin，来实现所需要的功能。
-</code></pre><p>类图太复杂了就不贴了</p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>CordovaActivity(继承Activity) 是整个cordova的入口Act,你可以继承它实现自己的需求。加载一个h5页面无非是从loadUrl(url)这个方法开始，就从这开始分析：<br>分析loadUrl(url)之前 ，先看一下这个Act启动做了哪些事：</p>
-<pre><code>/**
- * Called when the activity is first created.
- */
+ final FragmentManagerImpl mFragments = new     FragmentManagerImpl();
+</code></pre><p>这里看到就是返回了一个 FragmentManagerImpl实例，（FragmentManagerImpl是什么后面会讲）<br>接着看 fm.beginTrasaction():</p>
+<pre><code>//FragmentManagerImpl里
 @Override
-public void onCreate(Bundle savedInstanceState) {
-
-    // need to activate preferences before super.onCreate to avoid &quot;requestFeature() must be called before adding content&quot; exception
-    //加载配置
-    loadConfig();
-    //根据preferences来设置window
-    if (!preferences.getBoolean(&quot;ShowTitle&quot;, false)) {
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-    }
-
-    if (preferences.getBoolean(&quot;SetFullscreen&quot;, false)) {
-        Log.d(TAG, &quot;The SetFullscreen configuration is deprecated in favor of Fullscreen, and will be removed in a future version.&quot;);
-        preferences.set(&quot;Fullscreen&quot;, true);
-    }
-    if (preferences.getBoolean(&quot;Fullscreen&quot;, false)) {
-        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) {
-            //immersiveMode来标识沉浸式模式
-            immersiveMode = true;
-        } else {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-    } else {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-    }
-
-    super.onCreate(savedInstanceState);
-     //设置
-    cordovaInterface = makeCordovaInterface();
-    if (savedInstanceState != null) {
-        cordovaInterface.restoreInstanceState(savedInstanceState);
-    }
+public FragmentTransaction beginTransaction() {
+      return new BackStackRecord(this);
 }
-</code></pre><p>主要看一下loadConfig():</p>
-<pre><code> protected void loadConfig() {
-    ConfigXmlParser parser = new ConfigXmlParser();
-    parser.parse(this);
-    preferences = parser.getPreferences();
-    preferences.setPreferencesBundle(getIntent().getExtras());
-    launchUrl = parser.getLaunchUrl();
-    pluginEntries = parser.getPluginEntries();
-    Config.parser = parser;
-}
-</code></pre><p>  ConfigXmlParser其实就是cordova的配置解析的类，看代码很好理解 。</p>
-<p>  新建一个ConfigXmlParser类的实例，调用parse()方法，这个方法会根据res/xml/目录下的comfig.xml文件解析出插件以及一些配置 。主要方法如下：</p>
-<pre><code>public void parse(XmlPullParser xml) {
-   int eventType = -1;
-
-   while (eventType != XmlPullParser.END_DOCUMENT) {
-       if (eventType == XmlPullParser.START_TAG) {
-           handleStartTag(xml);
-       }
-       else if (eventType == XmlPullParser.END_TAG)
-       {
-           handleEndTag(xml);
-       }
-       try {
-           eventType = xml.next();
-       } catch (XmlPullParserException e) {
-           e.printStackTrace();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
-     }
- }
-
- handleStartTag（）handleEndTag（）
- 这两个方法自行看代码，很好理解，就不贴了。
-</code></pre><p>所以loadConfig()主是就是根据config.xml文件读取插件及一些配置，插件保存在 pluginEntries列表里，配置保存在preferences里。<br>所以接下来，也就有根据preferences去设置window相关属性。</p>
-<p>知道插件是在Act启动时候读取的，在看loadUrl(url):</p>
-<pre><code>public void loadUrl(String url) {
-    if (appView == null) {
-        init();
-    }
-
-    // If keepRunning
-    this.keepRunning = preferences.getBoolean(&quot;KeepRunning&quot;, true);
-
-    appView.loadUrlIntoView(url, true);
-}
-</code></pre><p> init()方法如下：</p>
-<pre><code>    protected void init() {
-    appView = makeWebView();
-    createViews();
-    if (!appView.isInitialized()) {
-        appView.init(cordovaInterface, pluginEntries, preferences);
-    }
-    cordovaInterface.onCordovaInit(appView.getPluginManager());
-
-    // Wire the hardware volume controls to control media if desired.
-    String volumePref = preferences.getString(&quot;DefaultVolumeStream&quot;, &quot;&quot;);
-    if (&quot;media&quot;.equals(volumePref.toLowerCase(Locale.ENGLISH))) {
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
-    }
-}
-</code></pre><p>  接着看makeWebView（）：</p>
+</code></pre><p>就是new了一个BackStackRecord的实例，参数是当前FragmentManagerImpl的实例。再看BackStackRecord类：</p>
 <pre><code>/**
- * Construct the default web view object.
- * &lt;p/&gt;
- * Override this to customize the webview that is used.
+ * @hide Entry of an operation on the fragment back stack.
  */
-protected CordovaWebView makeWebView() {
-    return new CordovaWebViewImpl(makeWebViewEngine());
-}
-</code></pre><p> 注释很清楚，makeWebViewEngine()的返回做为参数 new一个CordovaWebViewImpl实例，既然appView 是CordovaWebViewImpl的实例，那就是调用CordovaWebViewImpl 的loadUrlIntoView(url, true)方法：</p>
-<pre><code> @Override
-public void loadUrlIntoView(final String url, boolean recreatePlugins) {
-    LOG.d(TAG, &quot;&gt;&gt;&gt; loadUrl(&quot; + url + &quot;)&quot;);
-    if (url.equals(&quot;about:blank&quot;) || url.startsWith(&quot;javascript:&quot;)) {
-        engine.loadUrl(url, false);
-        return;
-    }
-    ....省略一堆代码      
-    final boolean _recreatePlugins = recreatePlugins;
-    cordova.getActivity().runOnUiThread(new Runnable() {
-        public void run() {
-            if (loadUrlTimeoutValue &gt; 0) {
-                cordova.getThreadPool().execute(timeoutCheck);
-            }
-            engine.loadUrl(url, _recreatePlugins);
-        }
-    });
-}
-</code></pre><p> 在看engine.loadUrl(url, _recreatePlugins);之前，先看一这个engine是什么，engine其实就是上面实例化CordovaWebViewImpl时候做为参数传进来的</p>
-<p> 创建engine是这个方法：</p>
-<pre><code> public static CordovaWebViewEngine createEngine(Context context, CordovaPreferences preferences) {
-    String className = preferences.getString(&quot;webview&quot;, SystemWebViewEngine.class.getCanonicalName());
-    try {
-        Class&lt;?&gt; webViewClass = Class.forName(className);
-        Constructor&lt;?&gt; constructor = webViewClass.getConstructor(Context.class, CordovaPreferences.class);
-        return (CordovaWebViewEngine) constructor.newInstance(context, preferences);
-    } catch (Exception e) {
-        throw new RuntimeException(&quot;Failed to create webview. &quot;, e);
-    }
-}
-</code></pre><p> 配置里取webview的类名（如果已配置取配置的类名，没有取SystemWebViewEngine的类名），<br> 反射构造一个对象返回。这个SystemWebViewEngine是什么：</p>
-<pre><code>  public SystemWebViewEngine(SystemWebView webView, CordovaPreferences preferences) {
-    this.preferences = preferences;
-    this.webView = webView;
-    cookieManager = new SystemCookieManager(webView);
-}
-</code></pre><p> 从类名可知是webView 的引擎，其实就是封装了WebView 以及cookie管理、receiver等<br> 。再看这个SystemWebView类：</p>
-<pre><code>public class SystemWebView extends WebView implements CordovaWebViewEngine.EngineView {    
-....代码省略  
-}
-</code></pre><p>   可以看到这个SystemWebView是继承WebView的，本质是还是用的Android系统的WebView.<br>   上面看到了engine就是一个SystemWebViewEngine实例，看engine.loadUrl(url, _recreatePlugins)：</p>
-<pre><code>    /**
- * Load the url into the webview.
- */
-@Override
-public void loadUrl(final String url, boolean clearNavigationStack) {
-    webView.loadUrl(url);
-}
-</code></pre><p>还是交给webView的loadUrl(),webView是SystemWebView实例，还是调用系统的webView.loadUrl(url)去加载一个h5.<br>加载一个h5,过程大概是这样。</p>
-<p>再来看一下，h5调用native方法的过程：</p>
-<pre><code>假设一个过程：h5页面里点击按钮去加载另外一个页面
-//启动Act方法
-function startActivity(url, opts, className) {
-      cordova.exec(function() {console.log(&quot;Success&quot;);}, function(e) {console.log(&quot;Error: &quot;+e);}, &quot;Activity&quot;, &quot;start&quot;, [className, url, opts || {}]);
-};
-//点击按钮启动act
-&lt;button class=&quot;btn large&quot; onclick=&quot;startActivity(&apos;xhr/index.html&apos;);&quot;&gt;load index.html&lt;/button&gt;
-
-调用是cordova.exec()方法，cordova是一个js接着看exec方法：
-module.exports = {
-    exec: function(bridgeSecret, service, action, callbackId, argsJson) {
-        return prompt(argsJson, &apos;gap:&apos;+JSON.stringify([bridgeSecret, service, action, callbackId]));
-    },
-    ...
+final class BackStackRecord extends FragmentTransaction     implements
+FragmentManager.BackStackEntry, Runnable {
+       ...
+       void addOp(Op op) {
+   ..
    }
-</code></pre><p>   exec()里又调用prompt()方法，参数还是Json类型的。那这个prompt是啥，源码里搜了一下没找到，百度了一下：</p>
-<pre><code>   HTML DOM prompt() 方法
-prompt() 方法用于显示可提示用户进行输入的对话框
-prompt(text,defaultText)
-</code></pre><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>text</td>
-<td>可选。要在对话框中显示的纯文本（而不是 HTML 格式的文本）</td>
-</tr>
-<tr>
-<td>defaultText</td>
-<td>可选。默认的输入文本。</td>
-</tr>
-</tbody>
-</table>
-<p>这个prompt()就个js的显示对话框的方法啊！不是要调用native的方法的么，为什么调用这个方法。</p>
-<p>WebView使用时要设置一个 WebChromeClient对象，前面已经看到了。WebChromeClient它是可以处理js的3个方法 onJsAlert、onJsConfirm、onJsPrompt<br>这3个方法分别对应js的 alert 、confirm 、 prompt 方法，而这里只有 prompt 方法是可以接收返回值的，所以js可以通过prompt来调用一个Native方法后等待接收Native返回的值。所以我们只重写这个onJsPrompt()方法，处理自己的逻辑。在cordova框架里面SystemWebChromeClient类是继承WebChromeClient 且重写了 onJsPrompt()方法：</p>
-<pre><code>/**
- * Tell the client to display a prompt dialog to the user.
- * If the client returns true, WebView will assume that the client will
- * handle the prompt dialog and call the appropriate JsPromptResult method.
- *
- * Since we are hacking prompts for our own purposes, we should not be using them for
- * this purpose, perhaps we should hack console.log to do this instead!
- */
-@Override
-public boolean onJsPrompt(WebView view, String origin, String message, String defaultValue, final JsPromptResult result) {
-    // Unlike the @JavascriptInterface bridge, this method is always called on the UI thread.
-    //关键在这里
-    String handledRet = parentEngine.bridge.promptOnJsPrompt(origin, message, defaultValue);
-    if (handledRet != null) {
-        result.confirm(handledRet);
+   public FragmentTransaction add(Fragment fragment, String tag) {
+    doAddOp(0, fragment, tag, OP_ADD);
+    return this;
+    }
+    ...
+    replace()
+    remove()
+    hide()
+}
+</code></pre><p>代码太多只贴了部分，BackStackRecord的源码注释：fragment回退栈里的一个操作实体。<br>注意：这个类是继承Runnable接口以及抽象类FragmentTransaction<br>，其实这个类封装对fragment一系列的操作。</p>
+<p>看transaction.replace()方法:</p>
+<pre><code>public FragmentTransaction replace(int containerViewId,     Fragment fragment, String tag) {
+    if (containerViewId == 0) {
+        throw new IllegalArgumentException(&quot;Must use non-zero containerViewId&quot;);
+    }
+
+       doAddOp(containerViewId, fragment, tag, OP_REPLACE);
+        return this;
+}
+</code></pre><p>直接调用doAddOp()方法，再看doAddOp():</p>
+<pre><code>private void doAddOp(int containerViewId, Fragment     fragment, String tag, int opcmd) {
+        fragment.mFragmentManager = mManager;
+
+    if (tag != null) {
+    if (fragment.mTag != null &amp;&amp; !tag.equals(fragment.mTag)) {
+        throw new IllegalStateException(&quot;Can&apos;t change tag of fragment &quot;
+                + fragment + &quot;: was &quot; + fragment.mTag
+                + &quot; now &quot; + tag);
+    }
+    fragment.mTag = tag;
+}
+
+if (containerViewId != 0) {
+    if (fragment.mFragmentId != 0 &amp;&amp; fragment.mFragmentId != containerViewId) {
+        throw new IllegalStateException(&quot;Can&apos;t change container ID of fragment &quot;
+                + fragment + &quot;: was &quot; + fragment.mFragmentId
+                + &quot; now &quot; + containerViewId);
+    }
+    fragment.mContainerId = fragment.mFragmentId = containerViewId;
+    }
+
+    Op op = new Op();
+    op.cmd = opcmd;
+    op.fragment = fragment;
+    addOp(op);
+}
+</code></pre><p>1、把mManager(new BackStackRecord时传进来的)赋给fragment.mFragmentManager<br>2、设置fragment 的 tag 及mContainerId<br>3、new OP对象，调用addOp()</p>
+<p>看一下OP这个类：</p>
+<pre><code>static final class Op {
+        Op next;
+    Op prev;
+    int cmd;
+    Fragment fragment;
+        int enterAnim;
+        int exitAnim;
+        int popEnterAnim;
+    int popExitAnim;
+    ArrayList&lt;Fragment&gt; removed;
+}
+</code></pre><p>看到OP的定义特别像一个链表结点的定义（其实就是），再结合上面的分析我们可以看出<br>OP类就是用来描述对Fragment的一次操作的类，每次操作都会产生一个Op对象(在链表中对应一个结点)并添加到链表中。接着看一下addOp()</p>
+<pre><code>void addOp(Op op) {
+    if (mHead == null) {
+        mHead = mTail = op;
     } else {
-        dialogsHelper.showPrompt(message, defaultValue, new CordovaDialogsHelper.Result() {
-            @Override
-            public void gotResult(boolean success, String value) {
-                if (success) {
-                    result.confirm(value);
-                } else {
-                    result.cancel();
+        op.prev = mTail;
+        mTail.next = op;
+        mTail = op;
+        }
+    op.enterAnim = mEnterAnim;
+    op.exitAnim = mExitAnim;
+    op.popEnterAnim = mPopEnterAnim;
+    op.popExitAnim = mPopExitAnim;
+    mNumOp++;
+}
+</code></pre><p>addOp()就是链表的操作，把op结点插件到链表尾部，很好理解。<br>其它操作remove（）、hide()、show()、detach() 、attach()都是新建一个Op结点并插入到链表尾部。<br>再看transaction.commit():</p>
+<pre><code>public int commit() {
+       return commitInternal(false);
+}
+</code></pre><p>直接调用commitInternal（false）:</p>
+<pre><code>int commitInternal(boolean allowStateLoss) {
+    if (mCommitted) {
+        throw new IllegalStateException(&quot;commit already called&quot;);
+    }
+    if (FragmentManagerImpl.DEBUG) {
+        Log.v(TAG, &quot;Commit: &quot; + this);
+        LogWriter logw = new LogWriter(Log.VERBOSE, TAG);
+        PrintWriter pw = new FastPrintWriter(logw, false, 1024);
+        dump(&quot;  &quot;, null, pw, null);
+        pw.flush();
+    }
+    mCommitted = true;
+    if (mAddToBackStack) {
+        mIndex = mManager.allocBackStackIndex(this);
+    } else {
+        mIndex = -1;
+    }
+       mManager.enqueueAction(this, allowStateLoss);
+    return mIndex;
+}
+</code></pre><p>这里说明一下：<br>1、mCommitted标识当前transaction有没有提交，<br>2、mAddToBackStack标识当前的transaction 是否要加入回退栈<br>3、BackStackRecord继承了Runnable（也就是说事务其实是一个Runnable的对象）<br>我们分析一下 mManager.allocBackStackIndex(this)：</p>
+<pre><code> public int allocBackStackIndex(BackStackRecord bse) {
+    synchronized (this) {
+            if (mAvailBackStackIndices == null || mAvailBackStackIndices.size() &lt;= 0) {
+                if (mBackStackIndices == null) {
+                mBackStackIndices = new ArrayList&lt;BackStackRecord&gt;();
+            }
+            int index = mBackStackIndices.size();
+            if (DEBUG) Log.v(TAG, &quot;Setting back stack index &quot; + index + &quot; to &quot; + bse);
+            mBackStackIndices.add(bse);
+            return index;
+
+        } else {
+        int index = mAvailBackStackIndices.remove(mAvailBackStackIndices.size()-1);
+            if (DEBUG) Log.v(TAG, &quot;Adding back stack index &quot; + index + &quot; with &quot; + bse);
+            mBackStackIndices.set(index, bse);
+            return index;
+        }
+    }
+}
+</code></pre><p>这个方法主要是把事务添加到mAvailBackStackIndices列表里，并返回事务的index。</p>
+<p>看一下mManager.enqueueAction(this, allowStateLoss)做了什么：</p>
+<pre><code>/**
+ * Adds an action to the queue of pending actions.
+*
+ * @param action the action to add
+ * @param allowStateLoss whether to allow loss of state information
+ * @throws IllegalStateException if the activity has been destroyed
+ */
+public void enqueueAction(Runnable action, boolean allowStateLoss) {
+    if (!allowStateLoss) {
+        checkStateLoss();
+    }
+    synchronized (this) {
+        if (mDestroyed || mActivity == null) {
+            throw new IllegalStateException(&quot;Activity has been destroyed&quot;);
+        }
+        if (mPendingActions == null) {
+            mPendingActions = new ArrayList&lt;Runnable&gt;();
+        }
+        mPendingActions.add(action);
+        if (mPendingActions.size() == 1) {
+            mActivity.mHandler.removeCallbacks(mExecCommit);
+            mActivity.mHandler.post(mExecCommit);
+        }
+    }
+}
+</code></pre><p>mPendingActions是一个Runnable的列表，存储了待执行的事务。先把事务添加到列表，然后调用Act里的handler执行 removeCallbacks() 与post()方法。<br>这里可能会有两个疑问：1、mActivity什么时候传进来的 2、mExecCommit是什么鬼</p>
+<p>疑问1：</p>
+<p>//在FragmentManagerImpl类 可以看到mActivity是在这里传入的，这个方法在哪里调的呢。<br>    public void attachActivity(Activity activity,     FragmentContainer container, Fragment parent) {<br>        if (mActivity != null) throw new IllegalStateException(“Already attached”);<br>        mActivity = activity;<br>        mContainer = container;<br>        mParent = parent;<br>    }<br>    //mFragments 是在Activity里的一个变量，我们在Activity里搜一发<br>    final void attach(Context context, ActivityThread aThread,<br>        Instrumentation instr, IBinder token, int ident,<br>        Application application, Intent intent, ActivityInfo info,<br>        CharSequence title, Activity parent, String id,<br>        NonConfigurationInstances lastNonConfigurationInstances,<br>        Configuration config, IVoiceInteractor voiceInteractor) {<br>        attachBaseContext(context);</p>
+<pre><code>mFragments.attachActivity(this, mContainer, null);//重点在这里
+...这里省略一大坨代码
+
+}
+</code></pre><p> 我们看到了，在Activity的attach()方法里，会把当前的Activity以及mContainer传入来。<br>疑问2：</p>
+<p>//FragmentManagerImpl里  mExecCommit其实就是一个Runnable实例，这才是真正的commit的任务。<br>Runnable mExecCommit = new Runnable() {<br>    @Override<br>    public void run() {<br>        execPendingActions();//这才是重点<br>    }<br>};</p>
+<p>再回头看enqueueAction（）方法：1、添加事务（Runable类型）到mPendingActions列表<br>2、先除Message Queue里的mExecCommit 利用handler消息机制把mExecCommit（Runnable）对象post出去。(Android handler消息机制自行了解，这里不讲)<br>接着执行execPendingActions（）方法：重点来了</p>
+<pre><code>/**
+ * Only call from main thread!  只能在主线程调用
+ */
+public boolean execPendingActions() {
+    if (mExecutingActions) {
+        throw new IllegalStateException(&quot;Recursive entry to executePendingTransactions&quot;);
+    }
+
+    if (Looper.myLooper() != mActivity.mHandler.getLooper()) {
+        throw new IllegalStateException(&quot;Must be called from main thread of process&quot;);
+    }
+
+       boolean didSomething = false;
+
+    while (true) {
+        int numActions;
+        //先把mPendingActions列表赋给一个临时的列表mTmpActions,然后清空mPendingActions
+        synchronized (this) {
+            if (mPendingActions == null || mPendingActions.size() == 0) {
+                break;
+            }
+
+            numActions = mPendingActions.size();
+            if (mTmpActions == null || mTmpActions.length &lt; numActions)     {
+                mTmpActions = new Runnable[numActions];
+            }
+            mPendingActions.toArray(mTmpActions);
+            mPendingActions.clear();
+               mActivity.mHandler.removeCallbacks(mExecCommit);
+        }
+        //for循环从mTmpActions列表里取出事务，然后调用run()方法，列表里面的事务我们知道是BackStackRecord的实例
+        mExecutingActions = true;
+        for (int i=0; i&lt;numActions; i++) {
+            mTmpActions[i].run();
+            mTmpActions[i] = null;
+        }
+        mExecutingActions = false;
+        didSomething = true;
+    }
+
+    if (mHavePendingDeferredStart) {
+        boolean loadersRunning = false;
+        for (int i=0; i&lt;mActive.size(); i++) {
+            Fragment f = mActive.get(i);
+            if (f != null &amp;&amp; f.mLoaderManager != null) {
+                loadersRunning |= f.mLoaderManager.hasRunningLoaders();
+            }
+        }
+        if (!loadersRunning) {
+            mHavePendingDeferredStart = false;
+            startPendingDeferredFragments();
+        }
+    }
+    return didSomething;
+}
+</code></pre><p>代码做了注释，看BackStackRecord的run()方法:</p>
+<pre><code>public void run() {
+    if (FragmentManagerImpl.DEBUG) {
+           Log.v(TAG, &quot;Run: &quot; + this);
+    }
+
+    if (mAddToBackStack) {
+        if (mIndex &lt; 0) {
+            throw new IllegalStateException(&quot;addToBackStack() called after commit()&quot;);
+        }
+       }
+
+    bumpBackStackNesting(1);
+
+    SparseArray&lt;Fragment&gt; firstOutFragments = new SparseArray&lt;Fragment&gt;();
+    SparseArray&lt;Fragment&gt; lastInFragments = new SparseArray&lt;Fragment&gt;();
+    calculateFragments(firstOutFragments, lastInFragments);
+    beginTransition(firstOutFragments, lastInFragments, false);
+     //while循环去遍历整个链表，根据结点的cmd类型去执行对应的mManger里面的方法
+
+    Op op = mHead;
+    while (op != null) {
+        switch (op.cmd) {
+            case OP_ADD: {
+                Fragment f = op.fragment;
+                f.mNextAnim = op.enterAnim;
+                mManager.addFragment(f, false);
+            }
+            break;
+            case OP_REPLACE: {
+                Fragment f = op.fragment;
+                if (mManager.mAdded != null) {
+                //for循环从mAdded列表取出已添加过的Fragment进行比较
+                    for (int i = 0; i &lt; mManager.mAdded.size(); i++) {
+                        Fragment old = mManager.mAdded.get(i);
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v(TAG,
+                                &quot;OP_REPLACE: adding=&quot; + f + &quot; old=&quot; + old);
+                        }
+                        if (f == null || old.mContainerId == f.mContainerId) {
+                            if (old == f) {//若fragment已添加，把op的fragment置空。
+                                op.fragment = f = null;
+                            } else {//如果只是containerId一样的情况，则删除旧的fragment
+                                if (op.removed == null) {
+                                    op.removed = new ArrayList&lt;Fragment&gt;();
+                                }
+                                op.removed.add(old);
+                                old.mNextAnim = op.exitAnim;
+                                if (mAddToBackStack) {
+                                    old.mBackStackNesting += 1;
+                                    if (FragmentManagerImpl.DEBUG) {
+                                        Log.v(TAG, &quot;Bump nesting of &quot;
+                                            + old + &quot; to &quot; + old.mBackStackNesting);
+                                    }
+                                }
+                                mManager.removeFragment(old, mTransition, mTransitionStyle);
+                            }
+                        }
+                    }
+                }
+                //添加fragment
+                if (f != null) {
+                    f.mNextAnim = op.enterAnim;
+                    mManager.addFragment(f, false);
                 }
             }
-        });
-    }
-    return true;
-}
-</code></pre><p>先是交给bridge.promptOnJsPrompt()来处理自己的逻辑并返回一个string的值，非空则处理结束返回结果 ， 为空就是说明是正常的对框，走对话框逻辑。<br>看这个promptOnJsPrompt（）方法：</p>
-<pre><code>public String promptOnJsPrompt(String origin, String message, String defaultValue) {
-    if (defaultValue != null &amp;&amp; defaultValue.length() &gt; 3 &amp;&amp; defaultValue.startsWith(&quot;gap:&quot;)) {
-        JSONArray array;
-        try {
-            array = new JSONArray(defaultValue.substring(4));
-            int bridgeSecret = array.getInt(0);
-            String service = array.getString(1);
-            String action = array.getString(2);
-            String callbackId = array.getString(3);
-            String r = jsExec(bridgeSecret, service, action, callbackId, message);
-            return r == null ? &quot;&quot; : r;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            break;
+            case OP_REMOVE: {
+                Fragment f = op.fragment;
+                f.mNextAnim = op.exitAnim;
+                mManager.removeFragment(f, mTransition, mTransitionStyle);
+            }
+            break;
+            case OP_HIDE: {
+                Fragment f = op.fragment;
+                f.mNextAnim = op.exitAnim;
+                mManager.hideFragment(f, mTransition, mTransitionStyle);
+            }
+            break;
+            case OP_SHOW: {
+                Fragment f = op.fragment;
+                f.mNextAnim = op.enterAnim;
+                mManager.showFragment(f, mTransition, mTransitionStyle);
+            }
+            break;
+            case OP_DETACH: {
+                Fragment f = op.fragment;
+                f.mNextAnim = op.exitAnim;
+                mManager.detachFragment(f, mTransition, mTransitionStyle);
+            }
+            break;
+            case OP_ATTACH: {
+                Fragment f = op.fragment;
+                f.mNextAnim = op.enterAnim;
+                mManager.attachFragment(f, mTransition, mTransitionStyle);
+            }
+            break;
+            default: {
+                throw new IllegalArgumentException(&quot;Unknown cmd: &quot; + op.cmd);
+            }
         }
-        return &quot;&quot;;
-    }
-    // Sets the native-&gt;JS bridge mode. 
-    else if (defaultValue != null &amp;&amp; defaultValue.startsWith(&quot;gap_bridge_mode:&quot;)) {
-        try {
-            int bridgeSecret = Integer.parseInt(defaultValue.substring(16));
-            jsSetNativeToJsBridgeMode(bridgeSecret, Integer.parseInt(message));
-        } catch (NumberFormatException e){
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return &quot;&quot;;
-    }
-    // Polling for JavaScript messages 
-    else if (defaultValue != null &amp;&amp; defaultValue.startsWith(&quot;gap_poll:&quot;)) {
-        int bridgeSecret = Integer.parseInt(defaultValue.substring(9));
-        try {
-            String r = jsRetrieveJsMessages(bridgeSecret, &quot;1&quot;.equals(message));
-            return r == null ? &quot;&quot; : r;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return &quot;&quot;;
-    }
-    else if (defaultValue != null &amp;&amp; defaultValue.startsWith(&quot;gap_init:&quot;)) {
-        // Protect against random iframes being able to talk through the bridge.
-        // Trust only pages which the app would have been allowed to navigate to anyway.
-        if (pluginManager.shouldAllowBridgeAccess(origin)) {
-            // Enable the bridge
-            int bridgeMode = Integer.parseInt(defaultValue.substring(9));
-            jsMessageQueue.setBridgeMode(bridgeMode);
-            // Tell JS the bridge secret.
-            int secret = generateBridgeSecret();
-            return &quot;&quot;+secret;
-        } else {
-            Log.e(LOG_TAG, &quot;gap_init called from restricted origin: &quot; + origin);
-        }
-        return &quot;&quot;;
-    }
-    return null;
-    }
-}
-</code></pre><p> 这里defaultValue配置几个不同String走不同的逻辑，那这几个string 是什么意思呢：</p>
-<pre><code>gap: 表明是js调用native插件接口
-gap_bridge_mode： native调用js代码的一种方式
-gap_poll：  轮询（JS-&gt;Native自助获取消息）
-gap_init：初始化
-</code></pre><p> 看gap:情况，也就是js调用native插件情况，获取参数传入方法 jsExec():</p>
-<pre><code> public String jsExec(int bridgeSecret, String service, String action, String callbackId, String arguments) throws JSONException, IllegalAccessException {
-    if (!verifySecret(&quot;exec()&quot;, bridgeSecret)) {
-        return null;
-    }
-    // If the arguments weren&apos;t received, send a message back to JS.  It will switch bridge modes and try again.  See CB-2666.
-    // We send a message meant specifically for this case.  It starts with &quot;@&quot; so no other message can be encoded into the same string.
-    if (arguments == null) {
-        return &quot;@Null arguments.&quot;;
+
+        op = op.next;
     }
 
-    jsMessageQueue.setPaused(true);
-    try {
-        // Tell the resourceApi what thread the JS is running on.
-        CordovaResourceApi.jsThread = Thread.currentThread();
-
-        pluginManager.exec(service, action, callbackId, arguments);
-        String ret = null;
-        if (!NativeToJsMessageQueue.DISABLE_EXEC_CHAINING) {
-            ret = jsMessageQueue.popAndEncode(false);
-        }
-        return ret;
-    } catch (Throwable e) {
-        e.printStackTrace();
-        return &quot;&quot;;
-    } finally {
-        jsMessageQueue.setPaused(false);
+    mManager.moveToState(mManager.mCurState, mTransition,
+        mTransitionStyle, true);
+    //是否要添加到回退栈
+    if (mAddToBackStack) {
+        mManager.addBackStackState(this);
     }
 }
-</code></pre><p>这里看到又调用了 pluginManager.exec(),插件在Act启动时个就已经加载进来了以map组织起来的:</p>
-<pre><code>  public void exec(final String service, final String action, final String callbackId, final String rawArgs) {
-    CordovaPlugin plugin = getPlugin(service);
-    if (plugin == null) {
-        Log.d(TAG, &quot;exec() call to unknown plugin: &quot; + service);
-        PluginResult cr = new PluginResult(PluginResult.Status.CLASS_NOT_FOUND_EXCEPTION);
-        app.sendPluginResult(cr, callbackId);
+</code></pre><p>说明：</p>
+<p>ArrayList mActive;//当的fragment列表<br>ArrayList mAdded;//已添加的fragment列表</p>
+<p>这里情况比较多就不一一去分析了，只分析添加fragment情况：addFragment()</p>
+<pre><code> public void addFragment(Fragment fragment, boolean moveToStateNow) {
+    if (mAdded == null) {
+        mAdded = new ArrayList&lt;Fragment&gt;();
+   }
+    if (DEBUG) Log.v(TAG, &quot;add: &quot; + fragment);
+    makeActive(fragment);
+    if (!fragment.mDetached) {
+        if (mAdded.contains(fragment)) {
+            throw new IllegalStateException(&quot;Fragment already added: &quot; + fragment);
+        }
+        mAdded.add(fragment);
+        fragment.mAdded = true;
+        fragment.mRemoving = false;
+        if (fragment.mHasMenu &amp;&amp; fragment.mMenuVisible) {
+            mNeedMenuInvalidate = true;
+        }
+        if (moveToStateNow) {
+            moveToState(fragment);
+        }
+    }
+}
+</code></pre><p>先看makeActivity(fragment) ：</p>
+<pre><code>void makeActive(Fragment f) {
+    if (f.mIndex &gt;= 0) {
         return;
     }
-    CallbackContext callbackContext = new CallbackContext(callbackId, app);
-    try {
-        long pluginStartTime = System.currentTimeMillis();
-        boolean wasValidAction = plugin.execute(action, rawArgs, callbackContext);
-        long duration = System.currentTimeMillis() - pluginStartTime;
 
-        if (duration &gt; SLOW_EXEC_WARNING_THRESHOLD) {
-            Log.w(TAG, &quot;THREAD WARNING: exec() call to &quot; + service + &quot;.&quot; + action + &quot; blocked the main thread for &quot; + duration + &quot;ms. Plugin should use CordovaInterface.getThreadPool().&quot;);
+    if (mAvailIndices == null || mAvailIndices.size() &lt;= 0) {
+        if (mActive == null) {
+            mActive = new ArrayList&lt;Fragment&gt;();
         }
-        if (!wasValidAction) {
-            PluginResult cr = new PluginResult(PluginResult.Status.INVALID_ACTION);
-            callbackContext.sendPluginResult(cr);
-        }
-    } catch (JSONException e) {
-        PluginResult cr = new PluginResult(PluginResult.Status.JSON_EXCEPTION);
-        callbackContext.sendPluginResult(cr);
-    } catch (Exception e) {
-        Log.e(TAG, &quot;Uncaught exception from plugin&quot;, e);
-        callbackContext.error(e.getMessage());
+        f.setIndex(mActive.size(), mParent);
+        mActive.add(f);
+
+    } else {
+        f.setIndex(mAvailIndices.remove(mAvailIndices.size()-1), mParent);
+        mActive.set(f.mIndex, f);
     }
+    if (DEBUG) Log.v(TAG, &quot;Allocated fragment index &quot; + f);
 }
-</code></pre><p>根据service 去找对应的插件，然后调用插件的exec()方法。到这里我们知道js启用native插件的大概流程。这只是使用prompt()的方式调用native的方法。</p>
-<p>其实cordova在Android4.2以上的系统是使用原生的方式，接下来看看这种方式：</p>
-<p>在上面在分析加载h5初始化的过程中，会执行SystemWebViewEngine类的 这个方法exposeJsInterface（），看代码会了解：</p>
-<pre><code> private static void exposeJsInterface(WebView webView, CordovaBridge bridge) {
-    if ((Build.VERSION.SDK_INT &lt; Build.VERSION_CODES.JELLY_BEAN_MR1)) {
-        Log.i(TAG, &quot;Disabled addJavascriptInterface() bridge since Android version is old.&quot;);
-        // Bug being that Java Strings do not get converted to JS strings automatically.
-        // This isn&apos;t hard to work-around on the JS side, but it&apos;s easier to just
-        // use the prompt bridge instead.
-        return;            
-    }
-    SystemExposedJsApi exposedJsApi = new SystemExposedJsApi(bridge);
-    webView.addJavascriptInterface(exposedJsApi, &quot;_cordovaNative&quot;);
-}
-</code></pre><p>调用webView原生的方法，把SystemExposedJsApi类映射出去供js调用，js使用 _cordovaNative 就可以调用native方法。所以cordova框架在4.2以上使用是webView原生的方式与js交互的。<br>SystemExposedJsApi这个类就是暴露给js的类，其实只是做了一层封装，所有的实现都在CordovaBridge类里面。（自行看代码），SystemExposedJsApi类里面暴露一个exec()供 js调用：</p>
-<pre><code> @JavascriptInterface
-public String exec(int bridgeSecret, String service, String action, String callbackId, String arguments) throws JSONException, IllegalAccessException {
-    return bridge.jsExec(bridgeSecret, service, action, callbackId, arguments);
-}
-</code></pre><p>其实就是直接调用bridge.jsExec()方法，这个方法上面讲过了，接下来就是根据service找到目标插件，调用目标插件exec()方法。</p>
-<p>在cordova.js里有这么一段代码：</p>
-<pre><code> /**
- * Exports the ExposedJsApi.java object if available, otherwise exports the PromptBasedNativeApi.
+</code></pre><p>这里主要是把fragment设置一个index然后添加到mActive数组里。</p>
+<p>moveToState()方法：代码有点多，只贴关键代码。在这个方法里会走Fragment的生命周期。</p>
+<p>//mView就是fragment的整个视图（mView的源码注释： The View generated for this fragment.）</p>
+<pre><code>1.mView创建
+f.mView = f.performCreateView(f.getLayoutInflater( f.mSavedFragmentState), null, f.mSavedFragmentState);
+接着f.performCreateView()里会调用onCreateView()方法，到这里就明白了。
+
+2.mView添加
+//首先根据f.mContainerId 找到Conatiner 然后添加mView
+container = (ViewGroup)mContainer.findViewById(f.mContainerId);
+container.addView(f.mView);    
+那么f.mContainerId什么？
+源码注释：
+When a fragment is being dynamically added to the view hierarchy, this is the identifier of the parent container it is being added to.
+当fragment被动态添加到视图层次里，mContainerId就是它被添加到父容器的标识符。
+那这里我们也就明白了:
+如果是方式一：在布局里添加fragment，那包裹它的viewGroup 的id就是 这个fragment的mContainerId。
+如果是方式二：代码动态添加，那么你执行replace(id,fragment)方法时传入的id,就是这个fragment的mContainerId.
+看代码你就明白了。
+Fragment最重要的就是要理解moveToState()函数，该函数被调用时参数newState等于Activity当前生命周期状态。
+</code></pre><h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><p>其它地方找了一个动态添加fragment时序图）：<br><img src="http://7xw1t6.com1.z0.glb.clouddn.com/coder_fragment4.png" alt=""></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><pre><code>到这里我们了解Fragment在Act里是怎么被管理的。
+理一下大致过程：
+1、getFragementManager()获取一个管理Fragment的实例（FragmentManagerImpl）
+2、 beginTransaction() new一个事务（可以将其理解为对 Fragment 的一系列操作）
+3、操作：replace()、add()、remove()、hide（）就是new 一个OP对象添加到链表里 OP可以理解为对Fragment的一次操作的描述。replace()看代码我们知道它其实相当于add/remove的组合.
+4、最后commit()这个事务（利用activity的handler post一个消息到Message Queue,最后执行事务的run（）方法，遍历链表对fragment进行操作 ）
+相关类理解：
+1、FragmentManagerImpl : 顾名思义，它继承自抽象类FragmentManager，用来对 Fragment 进行管理。每个Act都有一个FragmentManagerImpl的实例变量mFragments
+2、BackStackRecord : 继承自抽象类FragmentTransation并实现了Runnable，每次调用FragmentManager对象的 beginTransaction()方法都会产生一个 BackStackRecord 对象，可以将其理解为对 Fragment 的一系列操作（即事务）
+3、FragmentContainer 接口类，FragmenManager与它的Container之间的回调
+4、OP: 每次对 Fragment 的操作都会产生一个 Op 对象，其表示双向链表的一个结点,OP类就是用来描述对Fragment的一次操作的类。
+</code></pre><p>接下来看一下6.0以上情况：</p>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p><img src="http://7xw1t6.com1.z0.glb.clouddn.com/dachengfragment2.png" alt=""></p>
+<h3 id="源码-1"><a href="#源码-1" class="headerlink" title="源码"></a>源码</h3><p>同样结合方式二来分析：<br>先看getFragmentManager()</p>
+<pre><code>/**
+ * Return the FragmentManager for interacting with fragments associated
+ * with this activity.
  */
-var nativeApi = this._cordovaNative || require(&apos;cordova/android/promptbasednativeapi&apos;);
-var currentApi = nativeApi;
-</code></pre><p>上面注释也写提很清楚：如果ExposedJsApi的对象（_cordovaNative）可用就原生的方式，否则就是使用prompt的方式。</p>
-<p>如何实现把jsMessageQueue的数据返回到js</p>
-<pre><code>prompt()方式：
-    这种方式，这前我们提到过prompt是可以有接收返回值的，就是把数据做为返回值返回就可以了。
-原生的方法：
-    native暴露了方法，直接从队列里取mesaage.
-    @JavascriptInterface
-    public String retrieveJsMessages(int bridgeSecret, boolean fromOnlineEvent) throws IllegalAccessException {
-        return bridge.jsRetrieveJsMessages(bridgeSecret, fromOnlineEvent);
-    }
-</code></pre><h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><pre><code>一、js调用native的流程（prompt方式）：
-    1  js 通过 prompt弹窗方法 往anroid native 发送消息。
-    2  Native利用WebChromeClient 对象的 onJsPrompt函数截获html 弹窗的消息。    
-    3  android本地截获到消息以后，通过Pluginmanager 把消息分发到目标插件，同时通过jsMessageQueue收集需要返回给js的数据。（异步处理）
+public FragmentManager getFragmentManager() {
+    return mFragments.getFragmentManager();
+}
+</code></pre><p>直接调用mFragments.getFragmentManager()，先看mFragments：</p>
+<pre><code>//Activity里
+final FragmentController mFragments = FragmentController.createController(new HostCallbacks());
+</code></pre><p>new一个 HostCallbacks 对象并将其作为参数传入 FragmentController 类的createController 静态方法中。看HostCallbacks(继承FragmentHostCallback)</p>
+<pre><code>最终会找到这里：
+//FragmentHostCallback
+FragmentHostCallback(Activity activity) {
+    this(activity, activity /*context*/, activity.mHandler, 0 /*windowAnimations*/);
+}
 
-二、js调用native(原生的方式)
-    1 js通过调用native暴露的方法exec()
-    2 native根据js传入的参数，找到对应的插件并执行exec()方法
-</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><pre><code>1、Cordova-Android是通过addJavascriptInterface (4.2以上)和 JS Prompt这两种方式来实现JS对于Native API的调用（4.2以下）。
-2、Cordova在android端使用了一个队列(NativeToJsMessageQueue)来专门管理返回给JS的数据。    
-3、上面的我们分析的都是js如何调用native的方法，没有看到cordova是怎么让native调用js 的方法的。
-   其实cordova框架设计初衷就是利用h5来开发app,native调用js用的原生的webview.loadUrl()方式。
+FragmentHostCallback(Activity activity, Context context,     Handler handler,
+    int windowAnimations) {
+    mActivity = activity;
+    mContext = context;
+    mHandler = handler;
+    mWindowAnimations = windowAnimations;
+}
+</code></pre><p>所以HostCallbacks 实例是保存了当前Activity以及Act的handler等信息。<br>再看FragmentController.createController（）方法</p>
+<pre><code>/**
+ * Returns a {@link FragmentController}.
+ */
+public static final FragmentController createController(FragmentHostCallback&lt;?&gt; callbacks) {
+    return new FragmentController(callbacks);
+}
+
+private FragmentController(FragmentHostCallback&lt;?&gt; callbacks) {
+    mHost = callbacks;
+}
+</code></pre><p>也就是把上面new 的HostCallbacks实例赋给FragmentController的mHost变量。<br>回头再看 mFragments.getFragmentManager()的方法：</p>
+<pre><code>/**
+ * Returns a {@link FragmentManager} for this controller.
+ */
+public FragmentManager getFragmentManager() {
+    return mHost.getFragmentManagerImpl();
+}
+</code></pre><p>mHost我们已经知道了，他是一个HostCallbacks的实例，所以接着看</p>
+<pre><code>mHost.getFragmentManagerImpl()：
+  //FragmentHostCallback里
+  FragmentManagerImpl getFragmentManagerImpl() {
+    return mFragmentManager;
+ }
+
+final FragmentManagerImpl mFragmentManager = new FragmentManagerImpl();
+</code></pre><p>看到这里，我们明白，其实最终还是返回一个FragmentManagerImpl的实例（与6.0以下情况一样，只是6.0以下是直接放在Act里，6.0及以上是放在FragmentHostCallback里）<br>FragmentManagerImpl这个类的工作是什么，前面已经分析过了<br>fm.beginTransaction()与上面一样，返回一个BackStackRecord的实例。<br>replace()、remove()、hide()等一些操作也与之前一样。</p>
+<p>我们知道 Fragment 的生命周期与 Acitivty 的有对应关系，那么当 Activity 的生命周期方法被触发时也会触发 Fragment 对应的生命周期方法，是通过FragmentController 对象来触发的。<br>接下来我们分析一下：<br>我们知道Activity 生命周期第一个被调用的方法是 onCreate方法，它是通过mInstrumentation.callActivityOnCreate（）被调用。<br>在 ActivityThread 的 performLounchActivity 方法中，我们发现如下代码：</p>
+<pre><code>代码调用顺序：
+//ActivityThread
+mInstrumentation.callActivityOnCreate(activity, r.state);
+
+//Instrumentation
+public void callActivityOnCreate(Activity activity, Bundle icicle) {
+    //...
+    activity.performCreate(icicle);
+    //...
+}
+
+//Activity
+final void performCreate(Bundle icicle) {
+onCreate(icicle);
+    //...
+    performCreateCommon();
+}
+
+ final void performCreateCommon() {
+    mVisibleFromClient = !mWindow.getWindowStyle().getBoolean(
+        com.android.internal.R.styleable.Window_windowNoDisplay, false);
+    mFragments.dispatchActivityCreated();
+    mActivityTransitionState.setEnterActivityOptions(this, getActivityOptions());
+}
+//终于到moveToState（）方法了，这个方法上面我们已经了解，主要是fragment的生命周期都在这里调用。
+public void dispatchActivityCreated() {
+    mStateSaved = false;
+    moveToState(Fragment.ACTIVITY_CREATED, false);
+}
+</code></pre><p>到这里我们可以看到，本质上还是没有变化的。</p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><pre><code>HostCallbacks : Activity 的内部类，继承自 FragmentHostCallback
+FragmentHostCallback : 持有 Handler、FragmentManagerImpl 等等对象的引用，别的对象可以通过持有它的引用间接控制 FragmentManagerImpl 等等对象
+FragmentController : Activity 通过控制它间接向     FragmentManagerImpl 发出命令
+FragmentManagerImpl : 顾名思义，它继承自 FragmentManager，用来对 Fragment 进行管理，在 FragmentHostCallback 中被初始化
+</code></pre><h3 id="干货"><a href="#干货" class="headerlink" title="干货"></a>干货</h3><pre><code>1、回退栈：
+
+在commit()方法之前，你可以调用addToBackStack()，把这个transaction加入back stack中去，这个back stack是由activity通过FM管理的，当用户按返回键时，就会回到上一个fragment的状态。
+2、两个存储index 的数组
+
+FragmentManager用mAvailBackStackIndices和mBackStackIndices两个数组来为BackStackRecord分配Index。mAvailBackStackIndices用来存储在mBackStackIndices中能够分配的Index，mBackStackIndices则用来保存BackStackRecord。
+这利用两个数组可以减少对mBackStackIndices的动态分配大小的次数，是一个以空间换时间的策略。
+3、Activity与Fragment生命周期
+
+FragmentManager中有一堆dispatchxxx（）这样的方法，如：dispatchCreate() 、dispatchActivityCreated() 、dispatchResume()。这些方法的调用是在Activity 相应的生命周期函数里。（自行看代码）
+也就是说这些方法是随着Act进入到不同的生命周期而被调用的. FragmentManager里的mCurState的值是被这些方法触发设置的。
+4、commit()和commitAllowingStateLoss()
+
+从代码上来看，区别就是一个会执行下面这段代码，一个不会：
+ private void checkStateLoss() {
+    if (mStateSaved) {
+        throw new IllegalStateException(
+            &quot;Can not perform this action after onSaveInstanceState&quot;);
+    }
+    if (mNoTransactionsBecause != null) {
+        throw new IllegalStateException(
+            &quot;Can not perform this action inside of &quot; + mNoTransactionsBecause);
+    }
+}
+就是check一些状态值，然后抛exception.(修复bug时会看到这些异常信息)
+什么时候会抛出这些异常呢？
+是因为你意图在activity的状态被保存后提交一个Fragment事务（FragmentTransaction），于是引发了一种命名为Activity状态丢失（Activity state loss）的现象。
+（看源码 从Activity onSaveInstanceState()开始追）
+建议用commitAllowingStateLoss（）这个方法
 </code></pre>
     
   </div>
