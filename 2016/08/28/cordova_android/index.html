@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>浅析Cordova-Android | 文艺的Coder</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="大成,前端,Hexo主题,前端开发,ios,设计,android,design,nodejs,JavaScript" />
+  
+
+  <meta name="description" content="本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。
+Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
+如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅析Cordova-Android">
+<meta property="og:url" content="https://nongcunshaoye.github.io/2016/08/28/cordova_android/index.html">
+<meta property="og:site_name" content="文艺的Coder">
+<meta property="og:description" content="本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。
+Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
+如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。">
+<meta property="og:image" content="http://cordova.apache.org/static/img/guide/cordovaapparchitecture.png">
+<meta property="og:updated_time" content="2016-08-28T01:03:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅析Cordova-Android">
+<meta name="twitter:description" content="本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。
+Cordova简介官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
+如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。">
+<meta name="twitter:image" content="http://cordova.apache.org/static/img/guide/cordovaapparchitecture.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=028c63b1" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/archives/"
+            target="_self"
+            >
+            首页
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/categories/"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/tags/"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="http://www.jianshu.com/users/49a8a99dd6d3/latest_articles"
+            target="_self"
+            >
+            简书
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/about/"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cordova简介"><span class="toc-text">Cordova简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebView"><span class="toc-text">WebView</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#框架"><span class="toc-text">框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结-1"><span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-cordova_android" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">浅析Cordova-Android</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.28</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>大成</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="https://nongcunshaoye.github.io//2016/08/28/cordova_android/#disqus_thread"></a>
+        </span>
+      
+
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>本文是在学习cordova-android框架过程，总结的一些的东西，只是对这套框架的使用和原理有一个大概的了解。</p>
+<h3 id="Cordova简介"><a href="#Cordova简介" class="headerlink" title="Cordova简介"></a>Cordova简介</h3><pre><code>官网定义：Apache Cordova是一个开源的移动开发框架，它支持使用标准的Web开发技术（HTML5、CSS3和JavaScript）开发跨平台的移动端应用。
+如果需要访问各平台本地化的功能，如摄像头、网络、传感器……，可以通过使用插件(plugin)来完成。
+一句话就是，Cordova提供了一组设备相关的API，通过这组API，移动应用能够以JavaScript访问原生的设备功能，如摄像头、麦克风等。
+</code></pre><p>目前Cordova在大部分平台上都有实现，这里只了解Cordova在Android平台上的实现<br> <a href="https://github.com/apache/cordova-android" target="_blank" rel="external">gitHub源码地址</a></p>
+<p>在分析Cordiva-Android之前 ，先温习一下Android系统为我们提供的加载h5控件WebView的使用以及与js的交互。</p>
+<h3 id="WebView"><a href="#WebView" class="headerlink" title="WebView"></a>WebView</h3><p><strong>基本使用</strong></p>
+<pre><code>首先xml里：
+&lt;WebView
+        android:id=&quot;@+id/webview&quot;
+        android:layout_width=&quot;fill_parent&quot;
+        android:layout_height=&quot;fill_parent&quot;
+        android:layout_marginTop=&quot;10dp&quot; /&gt;
+
+//act里
+webview = (WebView) findViewById(R.id.webView1);
+webview.loadUrl(&quot;http://www.google.com/&quot;);
+//webview.reload();// reload page
+
+webview.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+设置标题，如：“Google”，在这里设置当前webview正在加载的页面的title：
+webview.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                titleview.setText(title);//textview
+            }
+        });
+</code></pre><p>使用方式很简单</p>
+<p> <strong>WebView与JavaScript的交互</strong></p>
+<p>我们知道WebView 本身就是提供js调用native的方法，以及native调用js的方法，来看看：<br>1、webview调用js</p>
+<pre><code>// webview调用js中的test的方法：
+mWebView.loadUrl(&quot;javascript:test()&quot;);
+//html如下:
+&lt;html&gt;
+  &lt;script language=&quot;javascript&quot;&gt;
+    //webview调用
+    function test() {
+      alert(&quot;1&quot;);
+    }
+  &lt;/script&gt;
+  &lt;body&gt;
+    .....
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>2、js调用native</p>
+<pre><code>//TestJavaScriptInterface是要给js调用的类：
+class TestJavaScriptInterface {          
+      @JavascriptInterface //4.2以后要加注解
+    public void hello(String name){
+        Toast.makeText(WebViewTest.this, name, Toast.LENGTH_SHORT).show();
+    }
+ }
+//首先webview要设置js可用：
+mWebview.setJavaScriptEnabled(true);
+
+//然后本地的类（被js调用的）映射出去
+mWebView.addJavascriptInterface(new TestJavaScriptInterface(), &quot;demo&quot;);
+“demo”就是公布给JS用的，js可以调用本地的类中的方法了：
+
+function test(){
+    if(demo){
+        demo.hello(&quot;test&quot;);
+    }
+}
+</code></pre><h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><pre><code>1、关于@JavascriptInterface ：
+  Android 4.2以下存在高危的漏洞，原理就是通过 WebView.addJavascriptInterface(Object o, String interface) 方法注册可供js调用的Java对象，
+  系统并没有对注册的Java对象方法调用做限制。导致攻击者可以利用反射调用未注册的其他任何Java对象，攻击者可以根据客户端的能力搞事情。
+
+2、为什么要先看一下WebView，因为cordova本质上还是这些东西，换汤不换药。
+</code></pre><p>接下来看cordova框架:</p>
+<h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>下面是官方框架图及描述：</p>
+<p><img src="http://cordova.apache.org/static/img/guide/cordovaapparchitecture.png" alt=""></p>
+<pre><code>Web App层是开发人员编写代码的主要地方，应用程序以网页的形式呈现，在一个index.html的本地页面文件中引用所需要的各种Web资源，
+如CSS、JavaScript、图像、影音文件等。应用程序的配置保存在config.xml文件中。
+
+WebView层用来呈现用户界面，即web页面的展现。例如，在Android平台是通过WebView控件实现web页面的呈现。
+
+Plugins主要用于在JavaScript代码中调用各平台native的功能。Cordova项目已经包含一些核心的plugin，
+如电池、摄像头、通讯录等。开发人员也可以开发自定义的plugin，来实现所需要的功能。
+</code></pre><p>类图太复杂了就不贴了</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>CordovaActivity(继承Activity) 是整个cordova的入口Act,你可以继承它实现自己的需求。加载一个h5页面无非是从loadUrl(url)这个方法开始，就从这开始分析：<br>分析loadUrl(url)之前 ，先看一下这个Act启动做了哪些事：</p>
+<pre><code>/**
+ * Called when the activity is first created.
+ */
+@Override
+public void onCreate(Bundle savedInstanceState) {
+
+    // need to activate preferences before super.onCreate to avoid &quot;requestFeature() must be called before adding content&quot; exception
+    //加载配置
+    loadConfig();
+    //根据preferences来设置window
+    if (!preferences.getBoolean(&quot;ShowTitle&quot;, false)) {
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+    }
+
+    if (preferences.getBoolean(&quot;SetFullscreen&quot;, false)) {
+        Log.d(TAG, &quot;The SetFullscreen configuration is deprecated in favor of Fullscreen, and will be removed in a future version.&quot;);
+        preferences.set(&quot;Fullscreen&quot;, true);
+    }
+    if (preferences.getBoolean(&quot;Fullscreen&quot;, false)) {
+        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) {
+            //immersiveMode来标识沉浸式模式
+            immersiveMode = true;
+        } else {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    } else {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+    }
+
+    super.onCreate(savedInstanceState);
+     //设置
+    cordovaInterface = makeCordovaInterface();
+    if (savedInstanceState != null) {
+        cordovaInterface.restoreInstanceState(savedInstanceState);
+    }
+}
+</code></pre><p>主要看一下loadConfig():</p>
+<pre><code> protected void loadConfig() {
+    ConfigXmlParser parser = new ConfigXmlParser();
+    parser.parse(this);
+    preferences = parser.getPreferences();
+    preferences.setPreferencesBundle(getIntent().getExtras());
+    launchUrl = parser.getLaunchUrl();
+    pluginEntries = parser.getPluginEntries();
+    Config.parser = parser;
+}
+</code></pre><p>  ConfigXmlParser其实就是cordova的配置解析的类，看代码很好理解 。</p>
+<p>  新建一个ConfigXmlParser类的实例，调用parse()方法，这个方法会根据res/xml/目录下的comfig.xml文件解析出插件以及一些配置 。主要方法如下：</p>
+<pre><code>public void parse(XmlPullParser xml) {
+   int eventType = -1;
+
+   while (eventType != XmlPullParser.END_DOCUMENT) {
+       if (eventType == XmlPullParser.START_TAG) {
+           handleStartTag(xml);
+       }
+       else if (eventType == XmlPullParser.END_TAG)
+       {
+           handleEndTag(xml);
+       }
+       try {
+           eventType = xml.next();
+       } catch (XmlPullParserException e) {
+           e.printStackTrace();
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+     }
+ }
+
+ handleStartTag（）handleEndTag（）
+ 这两个方法自行看代码，很好理解，就不贴了。
+</code></pre><p>所以loadConfig()主是就是根据config.xml文件读取插件及一些配置，插件保存在 pluginEntries列表里，配置保存在preferences里。<br>所以接下来，也就有根据preferences去设置window相关属性。</p>
+<p>知道插件是在Act启动时候读取的，在看loadUrl(url):</p>
+<pre><code>public void loadUrl(String url) {
+    if (appView == null) {
+        init();
+    }
+
+    // If keepRunning
+    this.keepRunning = preferences.getBoolean(&quot;KeepRunning&quot;, true);
+
+    appView.loadUrlIntoView(url, true);
+}
+</code></pre><p> init()方法如下：</p>
+<pre><code>    protected void init() {
+    appView = makeWebView();
+    createViews();
+    if (!appView.isInitialized()) {
+        appView.init(cordovaInterface, pluginEntries, preferences);
+    }
+    cordovaInterface.onCordovaInit(appView.getPluginManager());
+
+    // Wire the hardware volume controls to control media if desired.
+    String volumePref = preferences.getString(&quot;DefaultVolumeStream&quot;, &quot;&quot;);
+    if (&quot;media&quot;.equals(volumePref.toLowerCase(Locale.ENGLISH))) {
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+}
+</code></pre><p>  接着看makeWebView（）：</p>
+<pre><code>/**
+ * Construct the default web view object.
+ * &lt;p/&gt;
+ * Override this to customize the webview that is used.
+ */
+protected CordovaWebView makeWebView() {
+    return new CordovaWebViewImpl(makeWebViewEngine());
+}
+</code></pre><p> 注释很清楚，makeWebViewEngine()的返回做为参数 new一个CordovaWebViewImpl实例，既然appView 是CordovaWebViewImpl的实例，那就是调用CordovaWebViewImpl 的loadUrlIntoView(url, true)方法：</p>
+<pre><code> @Override
+public void loadUrlIntoView(final String url, boolean recreatePlugins) {
+    LOG.d(TAG, &quot;&gt;&gt;&gt; loadUrl(&quot; + url + &quot;)&quot;);
+    if (url.equals(&quot;about:blank&quot;) || url.startsWith(&quot;javascript:&quot;)) {
+        engine.loadUrl(url, false);
+        return;
+    }
+    ....省略一堆代码      
+    final boolean _recreatePlugins = recreatePlugins;
+    cordova.getActivity().runOnUiThread(new Runnable() {
+        public void run() {
+            if (loadUrlTimeoutValue &gt; 0) {
+                cordova.getThreadPool().execute(timeoutCheck);
+            }
+            engine.loadUrl(url, _recreatePlugins);
+        }
+    });
+}
+</code></pre><p> 在看engine.loadUrl(url, _recreatePlugins);之前，先看一这个engine是什么，engine其实就是上面实例化CordovaWebViewImpl时候做为参数传进来的</p>
+<p> 创建engine是这个方法：</p>
+<pre><code> public static CordovaWebViewEngine createEngine(Context context, CordovaPreferences preferences) {
+    String className = preferences.getString(&quot;webview&quot;, SystemWebViewEngine.class.getCanonicalName());
+    try {
+        Class&lt;?&gt; webViewClass = Class.forName(className);
+        Constructor&lt;?&gt; constructor = webViewClass.getConstructor(Context.class, CordovaPreferences.class);
+        return (CordovaWebViewEngine) constructor.newInstance(context, preferences);
+    } catch (Exception e) {
+        throw new RuntimeException(&quot;Failed to create webview. &quot;, e);
+    }
+}
+</code></pre><p> 配置里取webview的类名（如果已配置取配置的类名，没有取SystemWebViewEngine的类名），<br> 反射构造一个对象返回。这个SystemWebViewEngine是什么：</p>
+<pre><code>  public SystemWebViewEngine(SystemWebView webView, CordovaPreferences preferences) {
+    this.preferences = preferences;
+    this.webView = webView;
+    cookieManager = new SystemCookieManager(webView);
+}
+</code></pre><p> 从类名可知是webView 的引擎，其实就是封装了WebView 以及cookie管理、receiver等<br> 。再看这个SystemWebView类：</p>
+<pre><code>public class SystemWebView extends WebView implements CordovaWebViewEngine.EngineView {    
+....代码省略  
+}
+</code></pre><p>   可以看到这个SystemWebView是继承WebView的，本质是还是用的Android系统的WebView.<br>   上面看到了engine就是一个SystemWebViewEngine实例，看engine.loadUrl(url, _recreatePlugins)：</p>
+<pre><code>    /**
+ * Load the url into the webview.
+ */
+@Override
+public void loadUrl(final String url, boolean clearNavigationStack) {
+    webView.loadUrl(url);
+}
+</code></pre><p>还是交给webView的loadUrl(),webView是SystemWebView实例，还是调用系统的webView.loadUrl(url)去加载一个h5.<br>加载一个h5,过程大概是这样。</p>
+<p>再来看一下，h5调用native方法的过程：</p>
+<pre><code>假设一个过程：h5页面里点击按钮去加载另外一个页面
+//启动Act方法
+function startActivity(url, opts, className) {
+      cordova.exec(function() {console.log(&quot;Success&quot;);}, function(e) {console.log(&quot;Error: &quot;+e);}, &quot;Activity&quot;, &quot;start&quot;, [className, url, opts || {}]);
+};
+//点击按钮启动act
+&lt;button class=&quot;btn large&quot; onclick=&quot;startActivity(&apos;xhr/index.html&apos;);&quot;&gt;load index.html&lt;/button&gt;
+
+调用是cordova.exec()方法，cordova是一个js接着看exec方法：
+module.exports = {
+    exec: function(bridgeSecret, service, action, callbackId, argsJson) {
+        return prompt(argsJson, &apos;gap:&apos;+JSON.stringify([bridgeSecret, service, action, callbackId]));
+    },
+    ...
+   }
+</code></pre><p>   exec()里又调用prompt()方法，参数还是Json类型的。那这个prompt是啥，源码里搜了一下没找到，百度了一下：</p>
+<pre><code>   HTML DOM prompt() 方法
+prompt() 方法用于显示可提示用户进行输入的对话框
+prompt(text,defaultText)
+</code></pre><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text</td>
+<td>可选。要在对话框中显示的纯文本（而不是 HTML 格式的文本）</td>
+</tr>
+<tr>
+<td>defaultText</td>
+<td>可选。默认的输入文本。</td>
+</tr>
+</tbody>
+</table>
+<p>这个prompt()就个js的显示对话框的方法啊！不是要调用native的方法的么，为什么调用这个方法。</p>
+<p>WebView使用时要设置一个 WebChromeClient对象，前面已经看到了。WebChromeClient它是可以处理js的3个方法 onJsAlert、onJsConfirm、onJsPrompt<br>这3个方法分别对应js的 alert 、confirm 、 prompt 方法，而这里只有 prompt 方法是可以接收返回值的，所以js可以通过prompt来调用一个Native方法后等待接收Native返回的值。所以我们只重写这个onJsPrompt()方法，处理自己的逻辑。在cordova框架里面SystemWebChromeClient类是继承WebChromeClient 且重写了 onJsPrompt()方法：</p>
+<pre><code>/**
+ * Tell the client to display a prompt dialog to the user.
+ * If the client returns true, WebView will assume that the client will
+ * handle the prompt dialog and call the appropriate JsPromptResult method.
+ *
+ * Since we are hacking prompts for our own purposes, we should not be using them for
+ * this purpose, perhaps we should hack console.log to do this instead!
+ */
+@Override
+public boolean onJsPrompt(WebView view, String origin, String message, String defaultValue, final JsPromptResult result) {
+    // Unlike the @JavascriptInterface bridge, this method is always called on the UI thread.
+    //关键在这里
+    String handledRet = parentEngine.bridge.promptOnJsPrompt(origin, message, defaultValue);
+    if (handledRet != null) {
+        result.confirm(handledRet);
+    } else {
+        dialogsHelper.showPrompt(message, defaultValue, new CordovaDialogsHelper.Result() {
+            @Override
+            public void gotResult(boolean success, String value) {
+                if (success) {
+                    result.confirm(value);
+                } else {
+                    result.cancel();
+                }
+            }
+        });
+    }
+    return true;
+}
+</code></pre><p>先是交给bridge.promptOnJsPrompt()来处理自己的逻辑并返回一个string的值，非空则处理结束返回结果 ， 为空就是说明是正常的对框，走对话框逻辑。<br>看这个promptOnJsPrompt（）方法：</p>
+<pre><code>public String promptOnJsPrompt(String origin, String message, String defaultValue) {
+    if (defaultValue != null &amp;&amp; defaultValue.length() &gt; 3 &amp;&amp; defaultValue.startsWith(&quot;gap:&quot;)) {
+        JSONArray array;
+        try {
+            array = new JSONArray(defaultValue.substring(4));
+            int bridgeSecret = array.getInt(0);
+            String service = array.getString(1);
+            String action = array.getString(2);
+            String callbackId = array.getString(3);
+            String r = jsExec(bridgeSecret, service, action, callbackId, message);
+            return r == null ? &quot;&quot; : r;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return &quot;&quot;;
+    }
+    // Sets the native-&gt;JS bridge mode. 
+    else if (defaultValue != null &amp;&amp; defaultValue.startsWith(&quot;gap_bridge_mode:&quot;)) {
+        try {
+            int bridgeSecret = Integer.parseInt(defaultValue.substring(16));
+            jsSetNativeToJsBridgeMode(bridgeSecret, Integer.parseInt(message));
+        } catch (NumberFormatException e){
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return &quot;&quot;;
+    }
+    // Polling for JavaScript messages 
+    else if (defaultValue != null &amp;&amp; defaultValue.startsWith(&quot;gap_poll:&quot;)) {
+        int bridgeSecret = Integer.parseInt(defaultValue.substring(9));
+        try {
+            String r = jsRetrieveJsMessages(bridgeSecret, &quot;1&quot;.equals(message));
+            return r == null ? &quot;&quot; : r;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return &quot;&quot;;
+    }
+    else if (defaultValue != null &amp;&amp; defaultValue.startsWith(&quot;gap_init:&quot;)) {
+        // Protect against random iframes being able to talk through the bridge.
+        // Trust only pages which the app would have been allowed to navigate to anyway.
+        if (pluginManager.shouldAllowBridgeAccess(origin)) {
+            // Enable the bridge
+            int bridgeMode = Integer.parseInt(defaultValue.substring(9));
+            jsMessageQueue.setBridgeMode(bridgeMode);
+            // Tell JS the bridge secret.
+            int secret = generateBridgeSecret();
+            return &quot;&quot;+secret;
+        } else {
+            Log.e(LOG_TAG, &quot;gap_init called from restricted origin: &quot; + origin);
+        }
+        return &quot;&quot;;
+    }
+    return null;
+    }
+}
+</code></pre><p> 这里defaultValue配置几个不同String走不同的逻辑，那这几个string 是什么意思呢：</p>
+<pre><code>gap: 表明是js调用native插件接口
+gap_bridge_mode： native调用js代码的一种方式
+gap_poll：  轮询（JS-&gt;Native自助获取消息）
+gap_init：初始化
+</code></pre><p> 看gap:情况，也就是js调用native插件情况，获取参数传入方法 jsExec():</p>
+<pre><code> public String jsExec(int bridgeSecret, String service, String action, String callbackId, String arguments) throws JSONException, IllegalAccessException {
+    if (!verifySecret(&quot;exec()&quot;, bridgeSecret)) {
+        return null;
+    }
+    // If the arguments weren&apos;t received, send a message back to JS.  It will switch bridge modes and try again.  See CB-2666.
+    // We send a message meant specifically for this case.  It starts with &quot;@&quot; so no other message can be encoded into the same string.
+    if (arguments == null) {
+        return &quot;@Null arguments.&quot;;
+    }
+
+    jsMessageQueue.setPaused(true);
+    try {
+        // Tell the resourceApi what thread the JS is running on.
+        CordovaResourceApi.jsThread = Thread.currentThread();
+
+        pluginManager.exec(service, action, callbackId, arguments);
+        String ret = null;
+        if (!NativeToJsMessageQueue.DISABLE_EXEC_CHAINING) {
+            ret = jsMessageQueue.popAndEncode(false);
+        }
+        return ret;
+    } catch (Throwable e) {
+        e.printStackTrace();
+        return &quot;&quot;;
+    } finally {
+        jsMessageQueue.setPaused(false);
+    }
+}
+</code></pre><p>这里看到又调用了 pluginManager.exec(),插件在Act启动时个就已经加载进来了以map组织起来的:</p>
+<pre><code>  public void exec(final String service, final String action, final String callbackId, final String rawArgs) {
+    CordovaPlugin plugin = getPlugin(service);
+    if (plugin == null) {
+        Log.d(TAG, &quot;exec() call to unknown plugin: &quot; + service);
+        PluginResult cr = new PluginResult(PluginResult.Status.CLASS_NOT_FOUND_EXCEPTION);
+        app.sendPluginResult(cr, callbackId);
+        return;
+    }
+    CallbackContext callbackContext = new CallbackContext(callbackId, app);
+    try {
+        long pluginStartTime = System.currentTimeMillis();
+        boolean wasValidAction = plugin.execute(action, rawArgs, callbackContext);
+        long duration = System.currentTimeMillis() - pluginStartTime;
+
+        if (duration &gt; SLOW_EXEC_WARNING_THRESHOLD) {
+            Log.w(TAG, &quot;THREAD WARNING: exec() call to &quot; + service + &quot;.&quot; + action + &quot; blocked the main thread for &quot; + duration + &quot;ms. Plugin should use CordovaInterface.getThreadPool().&quot;);
+        }
+        if (!wasValidAction) {
+            PluginResult cr = new PluginResult(PluginResult.Status.INVALID_ACTION);
+            callbackContext.sendPluginResult(cr);
+        }
+    } catch (JSONException e) {
+        PluginResult cr = new PluginResult(PluginResult.Status.JSON_EXCEPTION);
+        callbackContext.sendPluginResult(cr);
+    } catch (Exception e) {
+        Log.e(TAG, &quot;Uncaught exception from plugin&quot;, e);
+        callbackContext.error(e.getMessage());
+    }
+}
+</code></pre><p>根据service 去找对应的插件，然后调用插件的exec()方法。到这里我们知道js启用native插件的大概流程。这只是使用prompt()的方式调用native的方法。</p>
+<p>其实cordova在Android4.2以上的系统是使用原生的方式，接下来看看这种方式：</p>
+<p>在上面在分析加载h5初始化的过程中，会执行SystemWebViewEngine类的 这个方法exposeJsInterface（），看代码会了解：</p>
+<pre><code> private static void exposeJsInterface(WebView webView, CordovaBridge bridge) {
+    if ((Build.VERSION.SDK_INT &lt; Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+        Log.i(TAG, &quot;Disabled addJavascriptInterface() bridge since Android version is old.&quot;);
+        // Bug being that Java Strings do not get converted to JS strings automatically.
+        // This isn&apos;t hard to work-around on the JS side, but it&apos;s easier to just
+        // use the prompt bridge instead.
+        return;            
+    }
+    SystemExposedJsApi exposedJsApi = new SystemExposedJsApi(bridge);
+    webView.addJavascriptInterface(exposedJsApi, &quot;_cordovaNative&quot;);
+}
+</code></pre><p>调用webView原生的方法，把SystemExposedJsApi类映射出去供js调用，js使用 _cordovaNative 就可以调用native方法。所以cordova框架在4.2以上使用是webView原生的方式与js交互的。<br>SystemExposedJsApi这个类就是暴露给js的类，其实只是做了一层封装，所有的实现都在CordovaBridge类里面。（自行看代码），SystemExposedJsApi类里面暴露一个exec()供 js调用：</p>
+<pre><code> @JavascriptInterface
+public String exec(int bridgeSecret, String service, String action, String callbackId, String arguments) throws JSONException, IllegalAccessException {
+    return bridge.jsExec(bridgeSecret, service, action, callbackId, arguments);
+}
+</code></pre><p>其实就是直接调用bridge.jsExec()方法，这个方法上面讲过了，接下来就是根据service找到目标插件，调用目标插件exec()方法。</p>
+<p>在cordova.js里有这么一段代码：</p>
+<pre><code> /**
+ * Exports the ExposedJsApi.java object if available, otherwise exports the PromptBasedNativeApi.
+ */
+var nativeApi = this._cordovaNative || require(&apos;cordova/android/promptbasednativeapi&apos;);
+var currentApi = nativeApi;
+</code></pre><p>上面注释也写提很清楚：如果ExposedJsApi的对象（_cordovaNative）可用就原生的方式，否则就是使用prompt的方式。</p>
+<p>如何实现把jsMessageQueue的数据返回到js</p>
+<pre><code>prompt()方式：
+    这种方式，这前我们提到过prompt是可以有接收返回值的，就是把数据做为返回值返回就可以了。
+原生的方法：
+    native暴露了方法，直接从队列里取mesaage.
+    @JavascriptInterface
+    public String retrieveJsMessages(int bridgeSecret, boolean fromOnlineEvent) throws IllegalAccessException {
+        return bridge.jsRetrieveJsMessages(bridgeSecret, fromOnlineEvent);
+    }
+</code></pre><h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><pre><code>一、js调用native的流程（prompt方式）：
+    1  js 通过 prompt弹窗方法 往anroid native 发送消息。
+    2  Native利用WebChromeClient 对象的 onJsPrompt函数截获html 弹窗的消息。    
+    3  android本地截获到消息以后，通过Pluginmanager 把消息分发到目标插件，同时通过jsMessageQueue收集需要返回给js的数据。（异步处理）
+
+二、js调用native(原生的方式)
+    1 js通过调用native暴露的方法exec()
+    2 native根据js传入的参数，找到对应的插件并执行exec()方法
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><pre><code>1、Cordova-Android是通过addJavascriptInterface (4.2以上)和 JS Prompt这两种方式来实现JS对于Native API的调用（4.2以下）。
+2、Cordova在android端使用了一个队列(NativeToJsMessageQueue)来专门管理返回给JS的数据。    
+3、上面的我们分析的都是js如何调用native的方法，没有看到cordova是怎么让native调用js 的方法的。
+   其实cordova框架设计初衷就是利用h5来开发app,native调用js用的原生的webview.loadUrl()方式。
+</code></pre>
+    
+  </div>
+</article>
+
+</div>
+
+
+
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/archives/"
+              target="_self"
+              >
+              首页
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/categories/"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/tags/"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="http://www.jianshu.com/users/49a8a99dd6d3/latest_articles"
+              target="_self"
+              >
+              简书
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/about/"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'dacheng';
+    
+    var disqus_url = 'https://nongcunshaoye.github.io/2016/08/28/cordova_android/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//dacheng.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
