@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Shell入门 | 文艺的Coder</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="shell," />
+  
+
+  <meta name="description" content="背景12去年在实习的时候接触了一点shelL编程，当时写了一个简单的shell的脚本，最近有时间继续学习一下shell编程。这篇文章主要是对shell概念、基本语法、命令以及调试等做一个整理，也是一次学习的记录。
+简介Shell其实就是一个解释执行命令的程序是一个命令的解释器；处于内核和用户之间，负责把用户的指令传递给内核并且把执行结果回显给用户。所谓shell编程其实就是用一定的语法将各种基本的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell入门">
+<meta property="og:url" content="https://nongcunshaoye.github.io/2016/08/29/shell/index.html">
+<meta property="og:site_name" content="文艺的Coder">
+<meta property="og:description" content="背景12去年在实习的时候接触了一点shelL编程，当时写了一个简单的shell的脚本，最近有时间继续学习一下shell编程。这篇文章主要是对shell概念、基本语法、命令以及调试等做一个整理，也是一次学习的记录。
+简介Shell其实就是一个解释执行命令的程序是一个命令的解释器；处于内核和用户之间，负责把用户的指令传递给内核并且把执行结果回显给用户。所谓shell编程其实就是用一定的语法将各种基本的">
+<meta property="og:updated_time" content="2016-10-12T10:26:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell入门">
+<meta name="twitter:description" content="背景12去年在实习的时候接触了一点shelL编程，当时写了一个简单的shell的脚本，最近有时间继续学习一下shell编程。这篇文章主要是对shell概念、基本语法、命令以及调试等做一个整理，也是一次学习的记录。
+简介Shell其实就是一个解释执行命令的程序是一个命令的解释器；处于内核和用户之间，负责把用户的指令传递给内核并且把执行结果回显给用户。所谓shell编程其实就是用一定的语法将各种基本的">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=028c63b1" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?4bb50691ae79c694aa237ce053868431";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/archives/"
+            target="_self"
+            >
+            首页
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/categories/"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/tags/"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="http://www.jianshu.com/users/49a8a99dd6d3/latest_articles"
+            target="_self"
+            >
+            简书
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="ROUND_RECT"
+            href="/about/"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见Shell"><span class="toc-text">常见Shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell语法"><span class="toc-text">shell语法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#变量定义"><span class="toc-text">变量定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#使用变量"><span class="toc-text">使用变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#只读变量"><span class="toc-text">只读变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#删除变量"><span class="toc-text">删除变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#特殊变量"><span class="toc-text">特殊变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#变量替换"><span class="toc-text">变量替换</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#until循环"><span class="toc-text">until循环</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#for循环"><span class="toc-text">for循环</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#while循环"><span class="toc-text">while循环</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#if条件"><span class="toc-text">if条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#case"><span class="toc-text">case</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#select"><span class="toc-text">select</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#算术运算符"><span class="toc-text">算术运算符</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关系运算符"><span class="toc-text">关系运算符</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#布尔运算符"><span class="toc-text">布尔运算符</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#字符串运算符"><span class="toc-text">字符串运算符</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#读取数组"><span class="toc-text">读取数组</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#数组的长度"><span class="toc-text">数组的长度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#与"><span class="toc-text">[[ ]] 与 (( ))</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell函数"><span class="toc-text">shell函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell命令"><span class="toc-text">shell命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#管道命令"><span class="toc-text">管道命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#重定向命令"><span class="toc-text">重定向命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#注意："><span class="toc-text">注意：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#管道命令与重定向区别是"><span class="toc-text">管道命令与重定向区别是</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell调试"><span class="toc-text">shell调试</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#执行时添加调试脚本的选项"><span class="toc-text">执行时添加调试脚本的选项</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#set命令"><span class="toc-text">set命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell优缺点"><span class="toc-text">shell优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-shell" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Shell入门</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.29</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>大成</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </span>
+
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="https://nongcunshaoye.github.io//2016/08/29/shell/#disqus_thread"></a>
+        </span>
+      
+
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">去年在实习的时候接触了一点shelL编程，当时写了一个简单的shell的脚本，最近有时间继续学习一下shell编程。</div><div class="line">这篇文章主要是对shell概念、基本语法、命令以及调试等做一个整理，也是一次学习的记录。</div></pre></td></tr></table></figure>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Shell其实就是一个解释执行命令的程序是一个命令的解释器；处于内核和用户之间，负责把用户的指令传递给内核并且把执行结果回显给用户。所谓shell编程其实就是用一定的语法将各种基本的命令组合起来，让shell程序去解释执行。</p>
+<h3 id="常见Shell"><a href="#常见Shell" class="headerlink" title="常见Shell"></a>常见Shell</h3><p>Unix/Linux上常见的Shell脚本解释器有bash、sh、csh、ksh等，习惯上把它们称作一种Shell。我们常说有多少种Shell，其实说的是Shell脚本解释器。</p>
+<blockquote>
+<p>bash</p>
+</blockquote>
+<p>bash是Linux标准默认的shell，本教程也基于bash讲解。bash由Brian Fox和Chet Ramey共同完成，是BourneAgain Shell的缩写，内部命令一共有40个。</p>
+<p>Linux使用它作为默认的shell是因为它有诸如以下的特色：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">可以使用类似DOS下面的doskey的功能，用方向键查阅和快速输入并修改命令。</div><div class="line">自动通过查找匹配的方式给出以某字符串开头的命令。</div><div class="line">包含了自身的帮助功能，你只要在提示符下面键入help就可以得到相关的帮助。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>ash</p>
+</blockquote>
+<p>ash shell 是由Kenneth Almquist编写的，Linux中占用系统资源最少的一个小shell，它只包含24个内部命令，因而使用起来很不方便。</p>
+<blockquote>
+<p>csh</p>
+</blockquote>
+<p>csh 是Linux比较大的内核，它由以William Joy为代表的共计47位作者编成，共有52个内部命令。该shell其实是指向/bin/tcsh这样的一个shell，也就是说，csh其实就是tcsh。</p>
+<blockquote>
+<p>ksh</p>
+</blockquote>
+<p>ksh 是Korn shell的缩写，由Eric Gisin编写，共有42条内部命令。该shell最大的优点是几乎和商业发行版的ksh完全兼容，这样就可以在不用花钱购买商业版本的情况下尝试商业版本的性能了。</p>
+<p>下面内容是基于linux下的bash展开的</p>
+<h3 id="shell语法"><a href="#shell语法" class="headerlink" title="shell语法"></a>shell语法</h3><p><strong>变量</strong></p>
+<p>shell存在三种变量：</p>
+<p>1) 局部变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。</div></pre></td></tr></table></figure>
+<p>2) 环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。</div><div class="line">必要的时候shell脚本也可以定义环境变量。</div></pre></td></tr></table></figure>
+<p>3) shell变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行</div></pre></td></tr></table></figure>
+<h5 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">variableName=&quot;value&quot;</div></pre></td></tr></table></figure>
+<p>注意，变量名和等号之间不能有空格，这可能和你熟悉的所有编程语言都不一样。同时，变量名的命名须遵循如下规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">首个字符必须为字母（a-z，A-Z）。</div><div class="line">中间不能有空格，可以使用下划线（_）。</div><div class="line">不能使用标点符号。</div><div class="line">不能使用bash里的关键字（可用help命令查看保留关键字）。</div></pre></td></tr></table></figure>
+<h5 id="使用变量"><a href="#使用变量" class="headerlink" title="使用变量"></a>使用变量</h5><p>使用一个定义过的变量，只要在变量名前面加美元符号（$）即可，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">name=&quot;dacheng&quot;</div><div class="line">echo $name</div><div class="line">echo $&#123;name&#125;</div></pre></td></tr></table></figure>
+<p>变量名外面的花括号是可选的，加不加都行，加花括号是为了帮助解释器识别变量的边界，比如下面这种情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for skill in Python Shell Java </div><div class="line">do</div><div class="line">    echo &quot;I am good at $&#123;skill&#125;Script&quot;</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>如果不给skill变量加花括号，写成echo “I am good at $skillScript”，解释器就会把$skillScript当成一个变量（其值为空），代码执行结果就不是我们期望的样子了。</p>
+<h5 id="只读变量"><a href="#只读变量" class="headerlink" title="只读变量"></a>只读变量</h5><p>使用 readonly 命令可以将变量定义为只读变量，只读变量的值不能被改变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">name=&quot;mozhiyan&quot;</div><div class="line">readonly name</div></pre></td></tr></table></figure>
+<h5 id="删除变量"><a href="#删除变量" class="headerlink" title="删除变量"></a>删除变量</h5><p>使用 unset 命令可以删除变量。语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unset variable_name</div></pre></td></tr></table></figure>
+<p>变量被删除后不能再次使用；unset 命令不能删除只读变量。</p>
+<h5 id="特殊变量"><a href="#特殊变量" class="headerlink" title="特殊变量"></a>特殊变量</h5><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0</td>
+<td>这个程序的执行名字</td>
+</tr>
+<tr>
+<td>$n 　</td>
+<td>这个程序的第n个参数值，n=1…9</td>
+</tr>
+<tr>
+<td>$*　</td>
+<td>这个程序的所有参数</td>
+</tr>
+<tr>
+<td>$#</td>
+<td>这个程序的参数个数</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>这个程序的PID</td>
+</tr>
+<tr>
+<td>$!</td>
+<td>执行上一个背景指令的PID</td>
+</tr>
+<tr>
+<td>$?</td>
+<td>上一个指令的返回值</td>
+</tr>
+</tbody>
+</table>
+<h5 id="变量替换"><a href="#变量替换" class="headerlink" title="变量替换"></a>变量替换</h5><table>
+<thead>
+<tr>
+<th>形式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>${var}</td>
+<td>变量本来的值</td>
+</tr>
+<tr>
+<td>${var:-word}</td>
+<td>如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。</td>
+</tr>
+<tr>
+<td>${var:=word}</td>
+<td>如果变量 var 为空或已被删除(unset)，那么返回 word，并将 var 的值设置为 word。</td>
+</tr>
+<tr>
+<td>${var:?message}</td>
+<td>如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。若此替换出现在Shell脚本中，那么脚本将停止运行。</td>
+</tr>
+<tr>
+<td>${var:+word}</td>
+<td>如果变量 var 被定义，那么返回 word，但不改变 var 的值。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>流程控制</strong></p>
+<h5 id="until循环"><a href="#until循环" class="headerlink" title="until循环"></a>until循环</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">until command</div><div class="line">do</div><div class="line">   Statement(s) to be executed until command is true</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>command 一般为条件表达式，如果返回值为 true，则继续执行循环体内的语句，否则跳出循环。</p>
+<h5 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h5><p>格式一</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for 变量</div><div class="line">do</div><div class="line">    语句</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>格式二</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for 变量 in 列表</div><div class="line">do</div><div class="line">    语句</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>格式三</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for ((变量=初始值; 条件判断; 变量变化))</div><div class="line">do</div><div class="line">    语句</div><div class="line">done</div></pre></td></tr></table></figure>
+<h5 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h5><p>格式一</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">while 条件;</div><div class="line">do</div><div class="line">    语句</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>格式二 死循环</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">while true</div><div class="line">do</div><div class="line">    语句</div><div class="line">done</div></pre></td></tr></table></figure>
+<h5 id="if条件"><a href="#if条件" class="headerlink" title="if条件"></a>if条件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if  条件</div><div class="line">then</div><div class="line"> Command</div><div class="line">else</div><div class="line"> Command</div><div class="line">fi</div></pre></td></tr></table></figure>
+<h5 id="case"><a href="#case" class="headerlink" title="case"></a>case</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">case 值 in</div><div class="line">模式1)</div><div class="line">    command1</div><div class="line">    command2</div><div class="line">    command3</div><div class="line">    ;;</div><div class="line">模式2）</div><div class="line">    command1</div><div class="line">    command2</div><div class="line">    command3</div><div class="line">    ;;</div><div class="line">*)</div><div class="line">    command1</div><div class="line">    command2</div><div class="line">    command3</div><div class="line">    ;;</div><div class="line">esac</div></pre></td></tr></table></figure>
+<h5 id="select"><a href="#select" class="headerlink" title="select"></a>select</h5><p>select 循环提供了一个简单的方法来创建一个编号的菜单，用户可从中选择。它是有用的，当你需要从列表中选择，要求用户选择一个或多个项目。</p>
+<p>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">select var in word1 word2 ... wordN</div><div class="line">do</div><div class="line">   Statement(s) to be executed for every word.</div><div class="line">done</div><div class="line">var是一个变量，word1 到 wordN是由空格分隔的字符（字）序列的名称。</div><div class="line">每次for循环的执行，变量var的值被设置为下一个单词的列表中的字，由 word1 到wordN。</div></pre></td></tr></table></figure>
+<p><strong>运算符</strong></p>
+<p>a = 10 b = 20</p>
+<h5 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h5><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>加法</td>
+<td><code>expr $a + $b</code> 结果为 30。</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减法</td>
+<td><code>expr $a - $b</code> 结果为 10。</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘法</td>
+<td><code>expr $a \* $b</code> 结果为  200。</td>
+</tr>
+<tr>
+<td>/</td>
+<td>除法</td>
+<td>v<code>expr $b / $a</code> 结果为 2。</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取余</td>
+<td><code>expr $b % $a</code> 结果为 0。</td>
+</tr>
+<tr>
+<td>=</td>
+<td>赋值</td>
+<td>a=$b 将把变量 b 的值赋给 a。</td>
+</tr>
+<tr>
+<td>==</td>
+<td>相等。</td>
+<td>用于比较两个数字，相同则返回 true。[ $a == $b ] 返回 false。</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>不相等。</td>
+<td>用于比较两个数字，不相同则返回 true。[ $a != $b ] 返回 true。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h5><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-eq</td>
+<td>检测两个数是否相等，相等返回 true。</td>
+<td>[ $a -eq $b ] 返回 true。</td>
+</tr>
+<tr>
+<td>-ne</td>
+<td>检测两个数是否相等，不相等返回 true。</td>
+<td>[ $a -ne $b ] 返回 true。</td>
+</tr>
+<tr>
+<td>-gt</td>
+<td>检测左边的数是否大于右边的，如果是，则返回 true。</td>
+<td>[ $a -gt $b ] 返回 false。</td>
+</tr>
+<tr>
+<td>-lt</td>
+<td>检测左边的数是否小于右边的，如果是，则返回 true。</td>
+<td>[ $a -lt $b ] 返回 true。</td>
+</tr>
+<tr>
+<td>-ge</td>
+<td>检测左边的数是否大等于右边的，如果是，则返回 true。</td>
+<td>[ $a -ge $b ] 返回 false。</td>
+</tr>
+<tr>
+<td>-le</td>
+<td>检测左边的数是否小于等于右边的，如果是，则返回 true。</td>
+<td>[ $a -le $b ] 返回 true。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="布尔运算符"><a href="#布尔运算符" class="headerlink" title="布尔运算符"></a>布尔运算符</h5><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>!</td>
+<td>非运算，表达式为 true 则返回 false，否则返回 true。</td>
+<td>[ ! false ] 返回 true。</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>或运算，有一个表达式为 true 则返回 true。</td>
+<td>[ $a -lt 20 -o $b -gt 100 ] 返回 true。</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>与运算，两个表达式都为 true 才返回 true。</td>
+<td>[ $a -lt 20 -a $b -gt 100 ] 返回 false。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="字符串运算符"><a href="#字符串运算符" class="headerlink" title="字符串运算符"></a>字符串运算符</h5><p>a=”abc”  b=”efg”</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>=</td>
+<td>检测两个字符串是否相等，相等返回 true。</td>
+<td>[ $a = $b ] 返回 false。</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>检测两个字符串是否相等，不相等返回 true。</td>
+<td>[ $a != $b ] 返回 true。</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>检测字符串长度是否为0，为0返回 true。</td>
+<td>[ -z $a ] 返回 false。</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>检测字符串长度是否为0，不为0返回 true。</td>
+<td>[ -z $a ] 返回 true。</td>
+</tr>
+<tr>
+<td>str</td>
+<td>检测字符串是否为空，不为空返回 true。</td>
+<td>[ $a ] 返回 true。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>字符串</strong></p>
+<p>字符串可以用单引号，也可以用双引号，也可以不用引号</p>
+<p>单引号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">str=&apos;this is a string&apos;</div></pre></td></tr></table></figure>
+<p>单引号字符串的限制：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；</div><div class="line">单引号字串中不能出现单引号（对单引号使用转义符后也不行）。</div></pre></td></tr></table></figure>
+<p>双引号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">your_name=&apos;dacheng&apos;</div><div class="line">str=&quot;Hello, I know your are \&quot;$your_name\&quot;! \n&quot;</div></pre></td></tr></table></figure>
+<p>双引号的优点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">双引号里可以有变量</div><div class="line">双引号里可以出现转义字符</div></pre></td></tr></table></figure>
+<p>拼接字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">your_name=&quot;dacheng&quot;</div><div class="line">greeting=&quot;hello, &quot;$your_name&quot; !&quot;</div><div class="line">greeting_1=&quot;hello, $&#123;your_name&#125; !&quot;</div><div class="line">echo $greeting $greeting_1</div></pre></td></tr></table></figure>
+<p>获取字符串长度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">string=&quot;abcd&quot;</div><div class="line">echo $&#123;#string&#125; #输出 4</div></pre></td></tr></table></figure>
+<p>提取子字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">string=&quot;hello world&quot;</div><div class="line">echo $&#123;string:1:4&#125; #输出ello</div></pre></td></tr></table></figure>
+<p>查找子字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">string=&quot;hello world&quot;</div><div class="line">echo `expr index &quot;$string&quot; is`</div></pre></td></tr></table></figure>
+<p><strong>数组</strong></p>
+<p>用括号来表示数组，数组元素用“空格”符号分割开。定义数组的一般形式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array_name=(value1 ... valuen)</div></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array_name=(value0 value1 value2 value3)</div></pre></td></tr></table></figure>
+<h5 id="读取数组"><a href="#读取数组" class="headerlink" title="读取数组"></a>读取数组</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$&#123;array_name[index]&#125;</div></pre></td></tr></table></figure>
+<h5 id="数组的长度"><a href="#数组的长度" class="headerlink" title="数组的长度"></a>数组的长度</h5><p>获取数组长度的方法与获取字符串长度的方法相同，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//取得数组元素的个数</div><div class="line">length=$&#123;#array_name[@]&#125;</div><div class="line">// 或者</div><div class="line">length=$&#123;#array_name[*]&#125;</div><div class="line">// 取得数组单个元素的长度</div><div class="line">lengthn=$&#123;#array_name[n]&#125;</div></pre></td></tr></table></figure>
+<p><strong>其它</strong></p>
+<h5 id="与"><a href="#与" class="headerlink" title="[[ ]] 与 (( ))"></a>[[ ]] 与 (( ))</h5><p>[[ ]] 是一个扩展命令(bash内建命令)，它基本上与[ ]用法一致，并且更强大也更符合程序员的使用习惯； </p>
+<p>a.当我们使用[ ]来测试两个并列条件，我们有两种做法：[ 条件1 -a 条件2 ]  或者 [ 条件1 ] &amp;&amp; [ 条件2 ] 但使用[[]]我们可以这样做：[[ 条件1 &amp;&amp; 条件2 ]]<br>(( ))是 一个算术运算命令(不是一个真的命令，感觉像是一个bash关键字),有了它， 我们基本可以废弃expr命令的使用，并且大大提高了脚本的执行效率，</p>
+<h3 id="shell函数"><a href="#shell函数" class="headerlink" title="shell函数"></a>shell函数</h3><p>函数可以让我们将一个复杂功能划分成若干模块，让程序结构更加清晰，代码重复利用率更高。shell 也支持函数,Shell 函数必须先定义后使用。</p>
+<p>Shell 函数的定义格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function_name () &#123;</div><div class="line">    list of commands</div><div class="line">    [ return value ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>也可以在函数名前加上关键字 function：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function function_name () &#123;</div><div class="line">    list of commands</div><div class="line">    [ return value ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>函数返回值，可以显式增加return语句；如果不加，会将最后一条命令运行结果作为返回值。</p>
+<p>Shell 函数返回值只能是整数，一般用来表示函数执行成功与否，0表示成功，其他值表示失败。如果 return 其他数据，比如一个字符串，往往会得到错误提示：“numeric argument required”。</p>
+<p>如果一定要让函数返回字符串，那么可以先定义一个变量，用来接收函数的计算结果，脚本在需要的时候访问这个变量来获得函数返回值。</p>
+<h3 id="shell命令"><a href="#shell命令" class="headerlink" title="shell命令"></a>shell命令</h3><p>shell命令有简单的命令，这也是我们经常用到的；当然有时也用到一些复杂的管道命令以及重定向命令。</p>
+<p><strong>简单命令</strong></p>
+<p>简单命令就是由一组单词构成，单词之间由空格或tab分隔，最后由一个控制运算符结尾，大多数情况下我们都使用的是简单命令。</p>
+<p>常用的简单命令：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cd /home</td>
+<td>进入 ‘/ home’ 目录’</td>
+<td>cd ..</td>
+<td>返回上一级目录</td>
+</tr>
+<tr>
+<td>cd ../..</td>
+<td>返回上两级目录</td>
+<td>cd</td>
+<td>进入个人的主目录</td>
+</tr>
+<tr>
+<td>cd ~user1</td>
+<td>进入个人的主目录</td>
+<td>cd -</td>
+<td>返回上次所在的目录</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>显示工作路径</td>
+<td>ls</td>
+<td>查看目录中的文件</td>
+</tr>
+<tr>
+<td>ls -F</td>
+<td>查看目录中的文件</td>
+<td>ls -l</td>
+<td>显示文件和目录的详细资料</td>
+</tr>
+<tr>
+<td>ls -a</td>
+<td>显示隐藏文件</td>
+<td>ls <em>[0-9]</em></td>
+<td>显示包含数字的文件名和目录名</td>
+</tr>
+<tr>
+<td>mkdir dir1</td>
+<td>创建一个叫做 ‘dir1’ 的目录’</td>
+<td>mkdir dir1 dir2</td>
+<td>同时创建两个目录</td>
+</tr>
+<tr>
+<td>mkdir -p /tmp/dir1/dir2</td>
+<td>创建一个目录树</td>
+<td>rm -f file1</td>
+<td>删除一个叫做 ‘file1’ 的文件’</td>
+</tr>
+<tr>
+<td>rmdir dir1</td>
+<td>删除一个叫做 ‘dir1’ 的目录’</td>
+<td>rm -rf dir1</td>
+<td>删除一个叫做 ‘dir1’ 的目录并同时删除其内容</td>
+</tr>
+<tr>
+<td>rm -rf dir1 dir2</td>
+<td>同时删除两个目录及它们的内容</td>
+<td>mv dir1 new_dir</td>
+<td>重命名/移动 一个目录</td>
+</tr>
+<tr>
+<td>cp file1 file2</td>
+<td>复制一个文件</td>
+<td>cp dir/* .</td>
+<td>复制一个目录下的所有文件到当前工作目录</td>
+</tr>
+<tr>
+<td>cp -a /tmp/dir1 .</td>
+<td>复制一个目录到当前工作目录</td>
+<td>cp -a dir1 dir2</td>
+<td>复制一个目录</td>
+</tr>
+<tr>
+<td>ln -s file1 lnk1</td>
+<td>创建一个指向文件或目录的软链接</td>
+<td>ln file1 lnk1</td>
+<td>创建一个指向文件或目录的物理链接</td>
+</tr>
+<tr>
+<td>touch -t 0712250000 file1</td>
+<td>修改一个文件或目录的时间戳 - (YYMMDDhhmm)</td>
+<td>find / -name file1</td>
+<td>从 ‘/‘ 开始进入根文件系统搜索文件和目录</td>
+</tr>
+<tr>
+<td>find / -user user1</td>
+<td>搜索属于用户 ‘user1’ 的文件和目录</td>
+<td>find /home/user1 -name *.bin</td>
+<td>在目录 ‘/ home/user1’ 中搜索带有’.bin’ 结尾的文件</td>
+</tr>
+<tr>
+<td>find /usr/bin -type f -atime +100</td>
+<td>搜索在过去100天内未被使用过的执行文件</td>
+<td>find /usr/bin -type f -mtime -10</td>
+<td>搜索在10天内被创建或者修改过的文件</td>
+</tr>
+<tr>
+<td>find / -name *.rpm -exec chmod 755 ‘{}’ \;</td>
+<td>搜索以 ‘.rpm’ 结尾的文件并定义其权限</td>
+<td>find / -xdev -name *.rpm</td>
+<td>搜索以 ‘.rpm’ 结尾的文件，忽略光驱、捷盘等可移动设备</td>
+</tr>
+<tr>
+<td>groupadd group_name</td>
+<td>创建一个新用户组</td>
+<td>groupdel group_name</td>
+<td>删除一个用户组</td>
+</tr>
+<tr>
+<td>groupmod -n new_group_name old_group_name</td>
+<td>重命名一个用户组</td>
+<td>useradd user1</td>
+<td>创建一个新用户</td>
+</tr>
+<tr>
+<td>userdel -r user1</td>
+<td>删除一个用户 ( ‘-r’ 排除主目录)</td>
+<td>usermod -c “User FTP” -g system -d /ftp/user1 -s /bin/nologin user1</td>
+<td>修改用户属性</td>
+</tr>
+<tr>
+<td>passwd user1</td>
+<td>修改一个用户的口令 (只允许root执行)</td>
+<td>ls -lh</td>
+<td>显示权限</td>
+</tr>
+<tr>
+<td>chmod ugo+rwx directory1</td>
+<td>设置目录的所有人(u)、群组(g)以及其他人(o)以读（r ）、写(w)和执行(x)的权限</td>
+<td>chmod go-rwx directory1</td>
+<td>删除群组(g)与其他人(o)对目录的读写执行权限</td>
+</tr>
+<tr>
+<td>chown user1 file1</td>
+<td>改变一个文件的所有人属性</td>
+<td>chown -R user1 directory1</td>
+<td>改变一个目录的所有人属性并同时改变改目录下所有文件的属性</td>
+</tr>
+<tr>
+<td>chgrp group1 file1</td>
+<td>改变文件的群组</td>
+<td>chown user1:group1 file1</td>
+<td>改变一个文件的所有人和群组属性</td>
+</tr>
+<tr>
+<td>find / -perm -u+s</td>
+<td>罗列一个系统中所有使用了SUID控制的文件</td>
+<td>chmod u+s /bin/file1</td>
+<td>设置一个二进制文件的 SUID 位 - 运行该文件的用户也被赋予和所有者同样的权限</td>
+</tr>
+<tr>
+<td>chmod u-s /bin/file1</td>
+<td>禁用一个二进制文件的 SUID位</td>
+<td>chmod g+s /home/public</td>
+<td>设置一个目录的SGID 位 - 类似SUID ，不过这是针对目录的</td>
+</tr>
+<tr>
+<td>chmod g-s /home/public</td>
+<td>禁用一个目录的 SGID 位</td>
+<td>chmod o+t /home/public</td>
+<td>设置一个文件的 STIKY 位 - 只允许合法所有人删除文件</td>
+</tr>
+<tr>
+<td>chmod o-t /home/public</td>
+<td>禁用一个目录的 STIKY 位</td>
+<td>bunzip2 file1.bz2</td>
+<td>解压一个叫做 ‘file1.bz2’的文件</td>
+</tr>
+<tr>
+<td>bzip2 file1</td>
+<td>压缩一个叫做 ‘file1’ 的文件</td>
+<td>gunzip file1.gz</td>
+<td>解压一个叫做 ‘file1.gz’的文件</td>
+</tr>
+<tr>
+<td>gzip file1</td>
+<td>压缩一个叫做 ‘file1’的文件</td>
+<td>gzip -9 file1</td>
+<td>最大程度压缩 </td>
+</tr>
+<tr>
+<td>rar a file1.rar test_file</td>
+<td>创建一个叫做 ‘file1.rar’ 的包</td>
+<td>rar a file1.rar file1 file2 dir1</td>
+<td>同时压缩 ‘file1’, ‘file2’ 以及目录 ‘dir1’</td>
+</tr>
+<tr>
+<td>rar x file1.rar</td>
+<td>解压rar包</td>
+<td>unrar x file1.rar</td>
+<td>解压rar包 </td>
+</tr>
+<tr>
+<td>tar -cvf archive.tar file1</td>
+<td>创建一个非压缩的 tarball</td>
+<td>tar -cvf archive.tar file1 file2 dir1</td>
+<td>创建一个包含了 ‘file1’, ‘file2’ 以及 ‘dir1’的档案文件</td>
+</tr>
+<tr>
+<td>tar -tf archive.tar</td>
+<td>显示一个包中的内容</td>
+<td>tar -xvf archive.tar</td>
+<td>释放一个包 </td>
+</tr>
+<tr>
+<td>tar -xvf archive.tar -C /tmp</td>
+<td>将压缩包释放到 /tmp目录下</td>
+<td>tar -cvfj archive.tar.bz2 dir1</td>
+<td>创建一个bzip2格式的压缩包</td>
+</tr>
+<tr>
+<td>tar -xvfj archive.tar.bz2</td>
+<td>解压一个bzip2格式的压缩包</td>
+<td>tar -cvfz archive.tar.gz dir1</td>
+<td>创建一个gzip格式的压缩包 </td>
+</tr>
+<tr>
+<td>tar -xvfz archive.tar.gz</td>
+<td>解压一个gzip格式的压缩包</td>
+<td>cat file1</td>
+<td>从第一个字节开始正向查看文件的内容 </td>
+</tr>
+<tr>
+<td>tac file1</td>
+<td>从最后一行开始反向查看一个文件的内容</td>
+<td>more file1</td>
+<td>查看一个长文件的内容 </td>
+</tr>
+<tr>
+<td>less file1</td>
+<td>类似于 ‘more’ 命令，但是它允许在文件中和正向操作一样的反向操作</td>
+<td>head -2 file1</td>
+<td>查看一个文件的前两行 </td>
+</tr>
+<tr>
+<td>tail -2 file1</td>
+<td>查看一个文件的最后两行</td>
+<td>tail -f /var/log/messages</td>
+<td>实时查看被添加到一个文件中的内容 </td>
+</tr>
+<tr>
+<td>grep Aug /var/log/messages</td>
+<td>在文件 ‘/var/log/messages’中查找关键词”Aug”</td>
+<td>grep ^Aug /var/log/messages</td>
+<td>在文件 ‘/var/log/messages’中查找以”Aug”开始的词汇</td>
+</tr>
+<tr>
+<td>grep [0-9] /var/log/messages</td>
+<td>选择 ‘/var/log/messages’ 文件中所有包含数字的行</td>
+<td>grep Aug -R /var/log/*</td>
+<td>在目录 ‘/var/log’ 及随后的目录中搜索字符串”Aug”</td>
+</tr>
+<tr>
+<td>sed ‘s/stringa1/stringa2/g’ example.txt</td>
+<td>将example.txt文件中的 “string1” 替换成 “string2”</td>
+<td>sed ‘/^$/d’ example.txt</td>
+<td>从example.txt文件中删除所有空白行</td>
+</tr>
+<tr>
+<td>sed ‘/ *#/d; /^$/d’ example.txt</td>
+<td>从example.txt文件中删除所有注释和空白行</td>
+<td>echo ‘esempio’</td>
+<td>tr ‘[:lower:]’ ‘[:upper:]’ 合并上下单元格内容</td>
+</tr>
+<tr>
+<td>sed -e ‘1d’ result.txt</td>
+<td>从文件example.txt 中排除第一行</td>
+<td>sed -n ‘/stringa1/p’</td>
+<td>查看只包含词汇 “string1”的行</td>
+</tr>
+<tr>
+<td>sed -e ‘s/ *$//‘ example.txt</td>
+<td>删除每一行最后的空白字符</td>
+<td>sed -e ‘s/stringa1//g’ example.txt</td>
+<td>从文档中只删除词汇 “string1” 并保留剩余全部</td>
+</tr>
+<tr>
+<td>sed -n ‘1,5p;5q’ example.txt</td>
+<td>查看从第一行到第5行内容</td>
+<td>sed -n ‘5p;5q’ example.txt</td>
+<td>查看第5行</td>
+</tr>
+<tr>
+<td>sed -e ‘s/00*/0/g’ example.txt</td>
+<td>用单个零替换多个零</td>
+<td>cat -n file1</td>
+<td>标示文件的行数</td>
+</tr>
+<tr>
+<td>echo a b c</td>
+<td>awk ‘{print $1,$3}’ 查看一行的第一和第三栏</td>
+<td>paste file1 file2</td>
+<td>合并两个文件或两栏的内容 </td>
+</tr>
+<tr>
+<td>paste -d ‘+’ file1 file2</td>
+<td>合并两个文件或两栏的内容，中间用”+”区分</td>
+<td>sort file1 file2</td>
+<td>排序两个文件的内容 </td>
+</tr>
+<tr>
+<td>sort file1 file2 uniq</td>
+<td>取出两个文件的并集(重复的行只保留一份)</td>
+<td>sort file1 file2  uniq -u</td>
+<td>删除交集，留下其他的行 </td>
+</tr>
+<tr>
+<td>sort file1 file2  uniq -d</td>
+<td>取出两个文件的交集(只留下同时存在于两个文件中的文件)</td>
+<td>comm -1 file1 file2</td>
+<td>比较两个文件的内容只删除 ‘file1’ 所包含的内容 </td>
+</tr>
+<tr>
+<td>comm -2 file1 file2</td>
+<td>比较两个文件的内容只删除 ‘file2’ 所包含的内容</td>
+<td>comm -3 file1 file2</td>
+<td>比较两个文件的内容只删除两个文件共有的部分</td>
+</tr>
+</tbody>
+</table>
+<p>命令还是有点多的，我也只是列了常用的部分</p>
+<p><strong>复杂命令</strong></p>
+<p>复杂的shell命令由简单命令组合而成，组合的方式有下面这几种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1、管道，在管道中，一条命令的输出作为其后命令的输入</div><div class="line">2、循环或条件结构</div><div class="line">3、其他组合</div></pre></td></tr></table></figure>
+<p>下面主要说一下管道命令以及重定向命令，其它不多说。</p>
+<h5 id="管道命令"><a href="#管道命令" class="headerlink" title="管道命令"></a>管道命令</h5><p>管道是一组由控制运算符 | 或 |&amp; 分隔的命令。</p>
+<p>语法格式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos;time&apos; &apos;-p&apos; &apos;!&apos; COMMAND1 &apos;|&apos; or &apos;|&amp;&apos; COMMAND2 ...</div></pre></td></tr></table></figure>
+<p>管道中的命令读取前一条命令的输出作为其输入，如同使用一根管子把前面的输出导入到自己的输入中。</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -aux | grep dacheng</div></pre></td></tr></table></figure>
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1、管道命令只处理前一个命令正确输出，不处理错误输出</div><div class="line">2、管道命令右边命令，必须能够接收标准输入流命令才行，当然管道两边都必须是shell命令</div><div class="line">3、如果管道不是异步执行的，shell 会一直等待直到管道中所有命令执行完成。</div><div class="line">4、管道中每一个命令在其自己的 subshell （子shell进程）中执行。</div></pre></td></tr></table></figure>
+<h5 id="重定向命令"><a href="#重定向命令" class="headerlink" title="重定向命令"></a>重定向命令</h5><p>输出重定向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">command-line1 [1-n] &gt; file或文件操作符或设备</div></pre></td></tr></table></figure>
+<p>命令意思是：将一条命令执行结果（标准输出，或者错误输出，本来都要打印到屏幕上面的重定向其它输出设备（文件，打开文件操作符，或打印机等等）1,2分别是标准输出，错误输出。</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ls 1&gt; success.txt</div><div class="line">//ls的结果输入到success.txt里（没有会新建）；1&gt;可以省略不写，默认所至标准输出</div><div class="line">ls 1&gt; success.txt 2&gt; error.txt</div><div class="line">//正确结果放入success里  错误放到error里</div></pre></td></tr></table></figure>
+<p>输入重定向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">command-line [n] &lt;file或文件描述符&amp;设备</div></pre></td></tr></table></figure>
+<p>命令意思是：命令默认从键盘获得的输入，改成从文件，或者其它打开文件以及设备输入。执行这个命令，将标准输入0，与文件或设备绑定。将由它进行输入。</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cat&gt;testfile &lt;test.sh</div><div class="line">//cat 从test.sh 获得输入数据，然后输出给文件testfile</div></pre></td></tr></table></figure>
+<h5 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1、shell遇到”&gt;”操作符，会判断右边文件是否存在，如果存在就先删除，并且创建新文件。不存在直接创建。 无论左边命令执行是否成功。右边文件都会变为空。</div><div class="line">2、“&gt;&gt;”操作符，判断右边文件，如果不存在，先创建。以添加方式打开文件，会分配一个文件描述符[不特别指定，默认为1,2]然后，与左边的标准输出（1）或错误输出（2） 绑定。</div><div class="line">3、当命令：执行完，绑定文件的描述符也自动失效。0,1,2又会空闲。</div><div class="line">4、一条命令启动，命令的输入，正确输出，错误输出，默认分别绑定0,1,2文件描述符。</div><div class="line">5、一条命令在执行前，先会检查输出是否正确，如果输出设备错误，将不会进行命令执行</div></pre></td></tr></table></figure>
+<p>exec绑定重定向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exec 文件描述符[n] &lt;或&gt; file或文件描述符或设备</div></pre></td></tr></table></figure>
+<p>上面的输入，输出重定向是将输入、输出绑定文件或设备后。只对当前那条指令是有效的。如果需要在绑定之后，接下来的所有命令都支持的话。就需要用exec命令</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">exec 1&gt;suc.txt</div><div class="line">//将接下来所有命令标准输出，绑定到suc.txt文件（输出到该文件</div></pre></td></tr></table></figure>
+<h5 id="管道命令与重定向区别是"><a href="#管道命令与重定向区别是" class="headerlink" title="管道命令与重定向区别是"></a>管道命令与重定向区别是</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1、左边的命令应该有标准输出 | 右边的命令应该接受标准输入</div><div class="line">   左边的命令应该有标准输出 &gt; 右边只能是文件</div><div class="line">   左边的命令应该需要标准输入 &lt; 右边只能是文件</div><div class="line">2、管道触发两个子进程执行&quot;|&quot;两边的程序；而重定向是在一个进程内执行</div></pre></td></tr></table></figure>
+<h3 id="shell调试"><a href="#shell调试" class="headerlink" title="shell调试"></a>shell调试</h3><p>Shell调试是通过运行脚本时加入相关调试选项或在脚本程序中加入相关语句，让shell程序在执行过程中显示出一些可供参考的调试信息。</p>
+<h5 id="执行时添加调试脚本的选项"><a href="#执行时添加调试脚本的选项" class="headerlink" title="执行时添加调试脚本的选项"></a>执行时添加调试脚本的选项</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-n，读一遍脚本中的命令但不执行，用于检查脚本中的语法错误。</div><div class="line">-v，一边执行脚本，一边将执行过的脚本命令打印到标准错误输出。</div><div class="line">-x，提供跟踪执行信息，将执行的每一条命令和结果依次打印出来。</div></pre></td></tr></table></figure>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sh -x script_name.sh</div></pre></td></tr></table></figure>
+<h5 id="set命令"><a href="#set命令" class="headerlink" title="set命令"></a>set命令</h5><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>set -x</td>
+<td>set -x开启调试模式</td>
+</tr>
+<tr>
+<td>set +x</td>
+<td>set +x关闭调试模式</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>代码块调试</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">set -x</div><div class="line">...</div><div class="line">code block</div><div class="line">...</div><div class="line">set +x</div></pre></td></tr></table></figure>
+<h3 id="shell优缺点"><a href="#shell优缺点" class="headerlink" title="shell优缺点"></a>shell优缺点</h3><p>shell编程近几年逐渐被遗弃，个人认为一是自身一些缺点（效率问题、跨平台、大规模I/O等）二是 其它脚本语言越来越火（python、ruby、groovy）。</p>
+<h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1、shell简单、灵活，对于Linux系统的自动化管理非常有帮助,所以shell更适合做流程化的系统管理工作。</div><div class="line">2、shell脚本可以在unix和linux系统中灵活移植。</div></pre></td></tr></table></figure>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><p>下面需求shell就满足不了或很难满足：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">跨平台的需求</div><div class="line">复杂的编程需求。</div><div class="line">安全性要求比较高的任务。</div><div class="line">大规模文件操作。</div><div class="line">多维数组支持。</div><div class="line">数据结构支持。</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>文章主要整理了一下shell的基础语法、命令、调试等。因为没有多少的经验，也给不了一些建议或踩过的坑等。python越来越火，在python编程里也会用到shell的一些基本命令等，shell作为基础的东西是有必要去学习了解的。之前实习写一个shell脚本，不用python来写主要原因是python脚本执行需要电脑里有python的环境，脚本如果拷到别人电脑（若没有python环境）就执行不了。<br>在移动端开发中使用脚本的地方还挺多的，比如：打包脚本、上传脚本、编译脚本等。</p>
+
+    
+  </div>
+</article>
+
+</div>
+
+
+
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/archives/"
+              target="_self"
+              >
+              首页
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/categories/"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/tags/"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="http://www.jianshu.com/users/49a8a99dd6d3/latest_articles"
+              target="_self"
+              >
+              简书
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="ROUND_RECT"
+              href="/about/"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'dacheng';
+    
+    var disqus_url = 'https://nongcunshaoye.github.io/2016/08/29/shell/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//dacheng.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
